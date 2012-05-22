@@ -1,4 +1,4 @@
-CREATE TABLE `Team` (
+CREATE TABLE `team` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`name` varchar(255) NOT NULL,
 	PRIMARY KEY (`id`)

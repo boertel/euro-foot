@@ -1,4 +1,4 @@
-CREATE TABLE `Bet` (
+CREATE TABLE `bet` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`game_id` int NOT NULL,
 	`user_id` int NOT NULL,
