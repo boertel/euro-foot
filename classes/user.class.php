@@ -145,6 +145,12 @@ public function setToken($t) {
 public function setScore($s) {
 	$this->score = $s;
 }
+public function toArray() {
+    return get_object_vars($this);
+}
+public function toJSON() {
+    return json_format($this->toArray());
+}
 
 public function __toString() {
 	$view = "Object(User) {\n";
@@ -158,5 +164,7 @@ public function __toString() {
 	$view .= "}";
 	return $view;
 }
+
+
 }
 ?>

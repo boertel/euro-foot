@@ -10,6 +10,8 @@ if ($_SERVER['REMOTE_ADDR'] == "127.0.0.1") {
     require 'settings/prod.private.php';
 }
 
+require 'utils.php';
+
 require 'classes/db.class.php';
 
 require 'classes/user.class.php';

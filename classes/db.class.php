@@ -22,7 +22,7 @@ class MyException extends Exception {
     }
 	
 	public function __toString() {
-		$view .= "<b>" . $this->info . "</b>\n";
+		$view = "<b>" . $this->info . "</b>\n";
 		if($this->infos) {
 			$view .= "<i>[ " . $this->getFile() . ", l. " . $this->getLine() . " ]</i>\n";
 		}
