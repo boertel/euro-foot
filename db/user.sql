@@ -5,7 +5,7 @@ CREATE TABLE `User` (
 	`last_name` varchar(255) NOT NULL,
 	`email` varchar(255) NOT NULL,
 	`token` varchar(255) NOT NULL,
-	`score` int(11) NOT NULL,
+	`score` int(11) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`),
 	UNIQUE KEY `username` (`username`)
 ) ENGINE=innoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;

@@ -3,12 +3,15 @@
 require 'settings/init.php';
 require 'facebook-sdk/facebook.php';
 
+global $FACEBOOK_APP;
+
 $app_id = $FACEBOOK_APP['id'];
 $app_namespace = $FACEBOOK_APP['namespace'];
 $app_url = $FACEBOOK_APP['url'];
 $scope = $FACEBOOK_APP['scope'];
 
 $title = "Euro Foot 2012";
+
 ?>
 
 <!DOCTYPE HTML>
