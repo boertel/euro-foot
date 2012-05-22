@@ -1,6 +1,6 @@
 <?php
 
-set_include_path( get_include_path() . PATH_SEPARATOR . $_SERVER['DOCUMENT_ROOT'] );
+set_include_path(get_include_path() . PATH_SEPARATOR . $_SERVER['DOCUMENT_ROOT']);
 
 if ($_SERVER['REMOTE_ADDR'] == "127.0.0.1") {
     require 'settings/dev.php';
@@ -12,12 +12,13 @@ if ($_SERVER['REMOTE_ADDR'] == "127.0.0.1") {
 
 require 'utils.php';
 
-require 'classes/db.class.php';
-
-require 'classes/user.class.php';
-require 'classes/team.class.php';
-require 'classes/game.class.php';
-require 'classes/bet.class.php';
-
-
+/* Autoload function to load automatically the php class when it's necessary
+ * All classes should be in /classes/ and named classename.class.php
+ */
+function __autoload($className) {
+    $classeFile = dirname(__FILE__) . '/../classes/' . strtolower($className) . '.class.php';
+    if (file_exists($classeFile)) {
+	include_once $classeFile;
+    }
+}
 ?>
