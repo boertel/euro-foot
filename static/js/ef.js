@@ -2,7 +2,6 @@ var EF = {};
 
 EF.loggedIn = function (response) {
     FB.api("/me", function (response) {
-        console.log(response);
         EF.api.post("/user", response, function (response) {
             console.log(response);
         });
@@ -14,7 +13,7 @@ EF.getLoginStatus = function () {
             EF.loggedIn(response);
         } else {
             $("a[name=connect-facebook]").click(function () {
-                EF.fbConnect();
+                EF.login();
             });
         }
     });
