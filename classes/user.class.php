@@ -86,6 +86,10 @@ public static function findAll($condition="") {
 	return Db::createObjects('User', $result->fetchAll(PDO::FETCH_NUM));
 }
 
+public static function findUsername($username) {
+    return self::findAll("WHERE username = \"" . $username . "\"");
+}
+
 public function getId() {
 	return $this->id;
 }
