@@ -60,7 +60,7 @@ class Bet {
      * @return bool true on success or false on failure. 
      */
     public static function add(Bet $Bet) {
-	$statement = Db::prepare("INSERT INTO Bet (match_id, user_id, score_a, score_b)"
+	$statement = Db::prepareRequest("INSERT INTO Bet (match_id, user_id, score_a, score_b)"
 				." VALUES (:matchId, :userId, :scoreA, :scoreB)");
 	
 	$result = $statement->execute(array('matchId' => $Bet->getmatch_id(), 'userId' => $Bet->getuser_id(), 
@@ -76,7 +76,7 @@ class Bet {
      * @return bool true on success or false on failure. 
      */
     public static function update(Bet $Bet) {
-	$statement = Db::prepare("UPDATE Bet SET match_id = :matchId, user_id = :userId, score_a = :scoreA,"
+	$statement = Db::prepareRequest("UPDATE Bet SET match_id = :matchId, user_id = :userId, score_a = :scoreA,"
 					." score_b = :scoreB WHERE id= :id");
 	return $statement->execute(array('matchId' => $Bet->getmatch_id(), 'userId' => $Bet->getuser_id(), 'scoreA' => $Bet->getscore_a(), 'scoreB' => $Bet->getscore_b(), "id" => $Bet->getId()));
     }
@@ -87,12 +87,12 @@ class Bet {
      * @return bool true on success or false on failure. 
      */
     public static function delete(Bet $Bet) {
-	$statement = Db::prepare("DELETE FROM Bet WHERE id = :id");
+	$statement = Db::prepareRequest("DELETE FROM Bet WHERE id = :id");
 	return $statement->execute(array('id' =>  $Bet->getId()));
     }
     
     public static function find($id) {
-	$statement = Db::prepare("SELECT * FROM Bet WHERE id = :id");
+	$statement = Db::prepareRequest("SELECT * FROM Bet WHERE id = :id");
 	$statement->execute(array('id' =>  $id));
 	return new Bet($statement->fetch(PDO::FETCH_NUM));
     }

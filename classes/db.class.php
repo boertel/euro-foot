@@ -81,9 +81,9 @@ class Db extends PDO {
     	}
     }
     
-    public static function prepare($requete) {
+    public static function prepareRequest($requete) {
     	try {
-    		return Db::getConnection()->prepare($requete);
+	    return Db::getConnection()->prepare($requete);
     	}
     	catch(PDOException $e) {
    			echo "<p class=\"err\"><pre>" . $e . "</pre></p>\n";
