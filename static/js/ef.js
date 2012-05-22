@@ -1,6 +1,8 @@
 var EF = {};
 
 EF.loggedIn = function (response) {
+    console.log(response);
+    EF.user.access_token = response.authResponse.accessToken;
     FB.api("/me", function (response) {
         console.log(response);
         EF.api.post("/user", response, function (response) {
@@ -31,11 +33,15 @@ EF.domain = {
     api: "/api"
 };
 
-EF.api = {
-};
+EF.user = {};
+
+EF.api = {};
 
 EF.api.post = function (path, data, callback) {
-    var path = EF.domain.api + path + ".php";
+    path = EF.domain.api + path + ".php?access_token=" + EF.user.access_token;
+
+    data = data || {};
+
     $.ajax({
         url: path,
         data: data,
