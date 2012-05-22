@@ -27,13 +27,13 @@ FACEBOOK DEV CONF FOR WINDOWS
 
 #With wamp add a file (whatever the name) in C:\wamp2\alias\ (assuming you installed wamp in c:\wamp2) with this content :
 
-<VirtualHost euro-foot.local>
-    DocumentRoot "C:/wamp2/www/euro-foot"
-    ServerName euro-foot.local
-    ServerAlias euro-foot.local
-    ErrorLog "C:/wamp2/logs/euro-foot.local-error_log"
-    CustomLog "C:/wamp2/logs/euro-foot.local-access_log" common
-</VirtualHost>
+    <VirtualHost euro-foot.local>
+	DocumentRoot "C:/wamp2/www/euro-foot"
+	ServerName euro-foot.local
+	ServerAlias euro-foot.local
+	ErrorLog "C:/wamp2/logs/euro-foot.local-error_log"
+	CustomLog "C:/wamp2/logs/euro-foot.local-access_log" common
+    </VirtualHost>
 
 The file will be automaticly included in your httpd.conf
 
