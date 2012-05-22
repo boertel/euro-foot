@@ -25,7 +25,7 @@ FACEBOOK DEV CONF FOR WINDOWS
 
     127.0.0.1 euro-foot.local
 
-# With wamp add a file (whatever the name) in C:\wamp2\alias\ (assuming you installed wamp in c:\wamp2) with this content :
+#With wamp add a file (whatever the name) in C:\wamp2\alias\ (assuming you installed wamp in c:\wamp2) with this content :
 
 <VirtualHost euro-foot.local>
     DocumentRoot "C:/wamp2/www/euro-foot"
