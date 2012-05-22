@@ -1,12 +1,12 @@
 var EF = {};
 
 EF.loggedIn = function (response) {
-    console.log(response);
+    FB.api("/me", function (response) {
+    });
 };
 EF.getLoginStatus = function () {
     FB.getLoginStatus(function (response) {
         if (response.authResponse) {
-            alert("OK");
         } else {
             $("a[name=connect-facebook]").click(function () {
                 EF.fbConnect();
