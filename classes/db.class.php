@@ -81,6 +81,15 @@ class Db extends PDO {
     	}
     }
     
+    public static function prepare($requete) {
+    	try {
+    		return Db::getConnection()->prepare($requete);
+    	}
+    	catch(PDOException $e) {
+   			echo "<p class=\"err\"><pre>" . $e . "</pre></p>\n";
+    	}
+    }
+    
     // Retourne le dernier id insere dans la table
     public static function lastId() {
     	return Db::getConnection()->lastInsertId();
