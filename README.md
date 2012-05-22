@@ -4,11 +4,11 @@ euro-foot
 FACEBOOK DEV CONF FOR MAC
 =========================
 
-Add the following line to your /etc/conf
+#Add the following line to your /etc/conf
 
 127.0.0.1 euro-foot.local
 
-Add the following vhost to your apache
+#Add the following vhost to your apache
 
 <VirtualHost *:80>
     DocumentRoot "/Users/arthur/Sites/euro-foot"
