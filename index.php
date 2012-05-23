@@ -3,15 +3,26 @@
 require 'settings/init.php';
 require 'facebook-sdk/facebook.php';
 
-global $FACEBOOK_APP;
-
-$app_id = $FACEBOOK_APP['id'];
-$app_namespace = $FACEBOOK_APP['namespace'];
-$app_url = $FACEBOOK_APP['url'];
-$scope = $FACEBOOK_APP['scope'];
 
 $title = "Euro Foot 2012";
 
+$app_id = $FACEBOOK_APP['id'];
+$app_secret = $FACEBOOK_APP['secret'];
+$app_namespace = $FACEBOOK_APP['namespace'];
+$app_url = 'https://apps.facebook.com/' . $app_namespace . '/';
+$scope = $FACEBOOK_APP['scope'];
+
+// Init the Facebook SDK
+$facebook = new Facebook(array(
+ 'appId'  => $app_id,
+ 'secret' => $app_secret,
+));
+
+$fb_user = $facebook->getUser();
+
+if ($fb_user) {
+    $user_profile = $facebook->api("/me");
+}
 ?>
 
 <!DOCTYPE HTML>
@@ -22,39 +33,6 @@ $title = "Euro Foot 2012";
 </head>
 <body>
 
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
-
-<?php
-
-require 'templates/connect.php';
-
-?>
-
-<script type="text/javascript" src="static/js/ef.js"></script>
-
-<div id="fb-root"></div>
-<script>
-    window.fbAsyncInit = function() {
-        FB.init({
-            appId      : <?php echo $FACEBOOK_APP['id']; ?>, // App ID
-            status     : true, // check login status
-            cookie     : true, // enable cookies to allow the server to access the session
-            xfbml      : true  // parse XFBML
-        });
-
-        // Additional initialization code here
-        EF.getLoginStatus();
-    };
-
-    // Load the SDK Asynchronously
-    (function(d){
-        var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement('script'); js.id = id; js.async = true;
-        js.src = "//connect.facebook.net/en_US/all.js";
-        ref.parentNode.insertBefore(js, ref);
-    }(document));
-</script>
 
 
 </body>
