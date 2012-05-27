@@ -21,4 +21,8 @@ function __autoload($className) {
 	include_once $classeFile;
     }
 }
+
+// Initialise the session 
+Session::getInstance();
+
 ?>

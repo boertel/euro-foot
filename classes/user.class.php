@@ -62,10 +62,22 @@ protected function createObjectWithArray($array) {
 	}
 }
 
-
+/**
+*
+* @param Bet $Bet
+* @return bool true on success or false on failure. 
+*/
 public static function add(User $User) {
-	Db::request("INSERT INTO User (username, first_name, last_name, email, token, score) VALUES (\"" . $User->getusername() . "\", \"" . $User->getfirst_name() . "\", \"" . $User->getlast_name() . "\", \"" . $User->getemail() . "\", \"" . $User->gettoken() . "\", \"" . $User->getscore() . "\")");
-	$User->setid(Db::lastId());
+    
+    $statement = Db::prepareRequest("INSERT INTO User (username, first_name, last_name, email, token, score) VALUES (:userName, :firstName, :lastName, :email, :token, :score)");
+    
+    $result = $statement->execute(array('userName' => $User->getUsername(), 'firstName' => $User->getFirst_name(), 
+	'lastName' => $User->getLast_name(), 'email' => $User->getEmail(), 'token' => $User->getToken(), 
+        'score' => $User->getScore()));
+   
+    $User->setid(Db::lastId());
+    
+    return $result;
 }
 
 public static function update(User $User) {
@@ -81,13 +93,14 @@ public static function find($id) {
 	return new User($result->fetch(PDO::FETCH_NUM));
 }
 
-public static function findAll($condition="") {
-	$result = Db::request("SELECT * FROM User " . $condition . "");
-	return Db::createObjects('User', $result->fetchAll(PDO::FETCH_NUM));
+public static function findAll($condition="", $values = array()) {
+	$statement = Db::prepareRequest("SELECT * FROM User " . $condition);
+        $statement->execute($values);
+	return Db::createObjects('User', $statement->fetchAll(PDO::FETCH_NUM));
 }
 
 public static function findUsername($username) {
-    return self::findAll("WHERE username = \"" . $username . "\"");
+    return self::findAll("WHERE username = :userName", array("userName"=>$username));
 }
 
 public function getId() {
