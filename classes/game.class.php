@@ -1,7 +1,7 @@
 <?php
 /** @author : 
   * @version : 1
-  * @date : 21/05/2012 21:59
+  * @date : 27/05/2012 12:03
   * @description : Game
   */
 
@@ -10,7 +10,8 @@ class Game {
 private $id;
 private $team_a;
 private $team_b;
-private $score;
+private $score_a;
+private $score_b;
 private $start_date;
 private $end_date;
 private $location;
@@ -24,40 +25,40 @@ public function __construct() {
 	if ($argc == 1 && getType($args[0]) == "array") {
 		$this->createObjectWithArray($args[0]);
 	}
-	else if ($argc == 8) {
-		$this->createObject($args[0],$args[1],$args[2],$args[3],$args[4],$args[5],$args[6],$args[7]);
+	else if ($argc == 9) {
+		$this->createObject($args[0],$args[1],$args[2],$args[3],$args[4],$args[5],$args[6],$args[7],$args[8]);
 	}
-	else if ($argc == 7) {
-		$this->createObjectWithoutPrimaryKey($args[0],$args[1],$args[2],$args[3],$args[4],$args[5],$args[6]);
+	else if ($argc == 9) {
+		$this->createObjectWithoutPrimaryKey($args[0],$args[1],$args[2],$args[3],$args[4],$args[5],$args[6],$args[7],$args[8]);
 	}
 	else {
 		throw new IllegalArgumentException("wrong number of arguments");
 	}
 }
 
-protected function createObject($id, $team_a, $team_b, $score, $start_date, $end_date, $location, $stadium) {
+protected function createObject($id, $team_a, $team_b, $score_a, $score_b, $start_date, $end_date, $location, $stadium) {
 	$this->id = $id;
 	$this->team_a = $team_a;
 	$this->team_b = $team_b;
-	$this->score = $score;
+	$this->score_a = $score_a;
+	$this->score_b = $score_b;
 	$this->start_date = $start_date;
 	$this->end_date = $end_date;
 	$this->location = $location;
 	$this->stadium = $stadium;
 }
 
-protected function createObjectWithoutPrimaryKey($team_a, $team_b, $score, $start_date, $end_date, $location, $stadium) {
-	$id = null;
-	$this->createObject($id, $team_a, $team_b, $score, $start_date, $end_date, $location, $stadium);
+protected function createObjectWithoutPrimaryKey($id, $team_a, $team_b, $score_a, $score_b, $start_date, $end_date, $location, $stadium) {
+	$this->createObject($id, $team_a, $team_b, $score_a, $score_b, $start_date, $end_date, $location, $stadium);
 }
 
 protected function createObjectWithArray($array) {
 	$numAttributes = count($array);
-	if ($numAttributes == 8) {
-		$this->createObject($array[0],$array[1],$array[2],$array[3],$array[4],$array[5],$array[6],$array[7]);
+	if ($numAttributes == 9) {
+		$this->createObject($array[0],$array[1],$array[2],$array[3],$array[4],$array[5],$array[6],$array[7],$array[8]);
 	}
-	else if ($numAttributes == 7) {
-		$this->createObjectWithoutPrimaryKey($array[0],$array[1],$array[2],$array[3],$array[4],$array[5],$array[6]);
+	else if ($numAttributes == 9) {
+		$this->createObjectWithoutPrimaryKey($array[0],$array[1],$array[2],$array[3],$array[4],$array[5],$array[6],$array[7],$array[8]);
 	}
 	else {
 		throw new IllegalArgumentException("wrong number of arguments");
@@ -66,20 +67,19 @@ protected function createObjectWithArray($array) {
 
 
 public static function add(Game $Game) {
-	Db::request("INSERT INTO Game (team_a, team_b, score, start_date, end_date, location, stadium) VALUES (\"" . $Game->getteam_a() . "\", \"" . $Game->getteam_b() . "\", \"" . $Game->getscore() . "\", \"" . $Game->getstart_date() . "\", \"" . $Game->getend_date() . "\", \"" . $Game->getlocation() . "\", \"" . $Game->getstadium() . "\")");
-	$Game->setid(Db::lastId());
+	Db::request("INSERT INTO Game (id, team_a, team_b, score_a, score_b, start_date, end_date, location, stadium) VALUES (\"" . $Game->getid() . "\", \"" . $Game->getteam_a() . "\", \"" . $Game->getteam_b() . "\", \"" . $Game->getscore_a() . "\", \"" . $Game->getscore_b() . "\", \"" . $Game->getstart_date() . "\", \"" . $Game->getend_date() . "\", \"" . $Game->getlocation() . "\", \"" . $Game->getstadium() . "\")");
 }
 
 public static function update(Game $Game) {
-	Db::request("UPDATE Game SET team_a=\"" . $Game->getteam_a() . "\", team_b=\"" . $Game->getteam_b() . "\", score=\"" . $Game->getscore() . "\", start_date=\"" . $Game->getstart_date() . "\", end_date=\"" . $Game->getend_date() . "\", location=\"" . $Game->getlocation() . "\", stadium=\"" . $Game->getstadium() . "\" WHERE id=\"" . $Game->getid() . "\"");
+	Db::request("UPDATE Game SET id=\"" . $Game->getid() . "\", team_a=\"" . $Game->getteam_a() . "\", team_b=\"" . $Game->getteam_b() . "\", score_a=\"" . $Game->getscore_a() . "\", score_b=\"" . $Game->getscore_b() . "\", start_date=\"" . $Game->getstart_date() . "\", end_date=\"" . $Game->getend_date() . "\", location=\"" . $Game->getlocation() . "\", stadium=\"" . $Game->getstadium() . "\" WHERE ");
 }
 
 public static function delete(Game $Game) {
-	Db::request("DELETE FROM Game WHERE id=\"" . $Game->getid() . "\"");
+	Db::request("DELETE FROM Game WHERE ");
 }
 
-public static function find($id) {
-	$result = Db::request("SELECT * FROM Game WHERE id = \"" . $id . "\"");
+public static function find() {
+	$result = Db::request("SELECT * FROM Game WHERE ");
 	return new Game($result->fetch(PDO::FETCH_NUM));
 }
 
@@ -100,8 +100,12 @@ public function getTeam_b() {
 	return $this->team_b;
 }
 
-public function getScore() {
-	return $this->score;
+public function getScore_a() {
+	return $this->score_a;
+}
+
+public function getScore_b() {
+	return $this->score_b;
 }
 
 public function getStart_date() {
@@ -132,8 +136,12 @@ public function setTeam_b($t) {
 	$this->team_b = $t;
 }
 
-public function setScore($s) {
-	$this->score = $s;
+public function setScore_a($s) {
+	$this->score_a = $s;
+}
+
+public function setScore_b($s) {
+	$this->score_b = $s;
 }
 
 public function setStart_date($s) {
@@ -157,7 +165,8 @@ public function __toString() {
 	$view .= "\tid : " . $this->id . ";\n";
 	$view .= "\tteam_a : " . $this->team_a . ";\n";
 	$view .= "\tteam_b : " . $this->team_b . ";\n";
-	$view .= "\tscore : " . $this->score . ";\n";
+	$view .= "\tscore_a : " . $this->score_a . ";\n";
+	$view .= "\tscore_b : " . $this->score_b . ";\n";
 	$view .= "\tstart_date : " . $this->start_date . ";\n";
 	$view .= "\tend_date : " . $this->end_date . ";\n";
 	$view .= "\tlocation : " . $this->location . ";\n";
