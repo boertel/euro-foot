@@ -16,6 +16,17 @@ $scope = $FACEBOOK_APP['scope'];
     <head>
         <meta charset="UTF-8">
         <title><?php echo $title; ?></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="includes/js/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="includes/js/jquery-ui-1.8.20.custom.min.js"></script>
+        <link type="text/css" href="includes/css/custom-theme/jquery-ui-1.8.20.custom.css" rel="stylesheet" />
+        <link type="text/css" href="template/style.css" rel="stylesheet" />
+        <style type="text/css">
+            /*demo page css*/
+            ul#icons {margin: 0; padding: 0;}
+            ul#icons li {margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: left;  list-style: none;}
+            ul#icons span.ui-icon {float: left; margin: 0 4px;}
+        </style>
     </head>
     <body>
 
@@ -38,36 +49,34 @@ $scope = $FACEBOOK_APP['scope'];
 
             print('<script> top.location.href=\'' . $loginUrl . '\'</script>');
         } else {
-        
+
             $userProfile = $facebook->api("/me");
             $username = $userProfile["username"];
-            
+
             // set a user session if not
-            if(!Session::getInstance()->isUserConnected()){
+            if (!Session::getInstance()->isUserConnected()) {
                 // try to find if user exist in database
                 $user = User::findUsername($username);
-                
+
                 // create a user in database if not
-                if($user == null){
+                if ($user == null) {
                     $last_name = $userProfile["name"];
                     $first_name = $userProfile["first_name"];
                     $email = $userProfile["email"];
-                    $token =  "???";
+                    $token = "???";
                     $score = 0;
-                    
+
                     $newUser = new User($username, $first_name, $last_name, $email, $token, $score);
                     User::add($newUser);
-                    
+
                     Session::getInstance()->setUserSession($newUser);
-                }else{
+                } else {
                     Session::getInstance()->setUserSession($user[0]);
                 }
             }
-            
+
             // From here the user is created in database, and the session is set with the server
-            var_dump(Session::getInstance()->getUserSession());
-       
-            // Include IHM Here !
+            require "template/bets.php";
         }
         ?>
     </body>

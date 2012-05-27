@@ -1,2 +1,2 @@
 RewriteEngine On
-RewriteRule (.*)\.css /templates/default/zipcss.php?file=$1.css [L]
+RewriteRule (.*)\.css /template/zipcss.php?file=$1.css [L]
