@@ -37,37 +37,38 @@ $scope = $FACEBOOK_APP['scope'];
                     ));
 
             print('<script> top.location.href=\'' . $loginUrl . '\'</script>');
-        }
+        } else {
         
-        $userProfile = $facebook->api("/me");
-        $username = $userProfile["username"];
-        
-        // set a user session if not
-        if(!Session::getInstance()->isUserConnected()){
-            // try to find if user exist in database
-            $user = User::findUsername($username);
+            $userProfile = $facebook->api("/me");
+            $username = $userProfile["username"];
             
-            // create a user in database if not
-            if($user == null){
-                $last_name = $userProfile["name"];
-                $first_name = $userProfile["first_name"];
-                $email = $userProfile["email"];
-                $token =  "???";
-                $score = 0;
+            // set a user session if not
+            if(!Session::getInstance()->isUserConnected()){
+                // try to find if user exist in database
+                $user = User::findUsername($username);
                 
-                $newUser = new User($username, $first_name, $last_name, $email, $token, $score);
-                User::add($newUser);
-                
-                Session::getInstance()->setUserSession($newUser);
-            }else{
-                Session::getInstance()->setUserSession($user[0]);
+                // create a user in database if not
+                if($user == null){
+                    $last_name = $userProfile["name"];
+                    $first_name = $userProfile["first_name"];
+                    $email = $userProfile["email"];
+                    $token =  "???";
+                    $score = 0;
+                    
+                    $newUser = new User($username, $first_name, $last_name, $email, $token, $score);
+                    User::add($newUser);
+                    
+                    Session::getInstance()->setUserSession($newUser);
+                }else{
+                    Session::getInstance()->setUserSession($user[0]);
+                }
             }
+            
+            // From here the user is created in database, and the session is set with the server
+            var_dump(Session::getInstance()->getUserSession());
+       
+            // Include IHM Here !
         }
-        
-        // From here the user is created in database, and the session is set with the server
-        var_dump(Session::getInstance()->getUserSession());
-   
-        // Include IHM Here !
         ?>
     </body>
 </html>
