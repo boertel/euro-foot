@@ -1,5 +1,8 @@
 euro-foot
 =========
+CONF OF APACHE
+-------------------------
+    activate the rewrite_module to enable url url rewriting. If you can't enable it, suppress the /template/.htaccess
 
 FACEBOOK DEV CONF FOR MAC
 -------------------------
