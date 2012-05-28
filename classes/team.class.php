@@ -9,7 +9,7 @@
 class Team {
 private $id;
 private $name;
-
+private $flag;
 
 public function __construct() {
 	$argc = func_num_args();
@@ -18,34 +18,35 @@ public function __construct() {
 	if ($argc == 1 && getType($args[0]) == "array") {
 		$this->createObjectWithArray($args[0]);
 	}
-	else if ($argc == 2) {
-		$this->createObject($args[0],$args[1]);
+	else if ($argc == 3) {
+		$this->createObject($args[0],$args[1],$args[2]);
 	}
-	else if ($argc == 1) {
-		$this->createObjectWithoutPrimaryKey($args[0]);
+	else if ($argc == 2) {
+		$this->createObjectWithoutPrimaryKey($args[0],$args[1]);
 	}
 	else {
 		throw new IllegalArgumentException("wrong number of arguments");
 	}
 }
 
-protected function createObject($id, $name) {
+protected function createObject($id, $name,$flag) {
 	$this->id = $id;
 	$this->name = $name;
+        $this->flag = $flag;
 }
 
-protected function createObjectWithoutPrimaryKey($name) {
+protected function createObjectWithoutPrimaryKey($name,$flag) {
 	$id = null;
-	$this->createObject($id, $name);
+	$this->createObject($id, $name,$flag);
 }
 
 protected function createObjectWithArray($array) {
 	$numAttributes = count($array);
-	if ($numAttributes == 2) {
-		$this->createObject($array[0],$array[1]);
+	if ($numAttributes == 3) {
+		$this->createObject($array[0],$array[1],$array[2]);
 	}
-	else if ($numAttributes == 1) {
-		$this->createObjectWithoutPrimaryKey($array[0]);
+	else if ($numAttributes == 2) {
+		$this->createObjectWithoutPrimaryKey($array[0],$array[1]);
 	}
 	else {
 		throw new IllegalArgumentException("wrong number of arguments");
@@ -54,26 +55,31 @@ protected function createObjectWithArray($array) {
 
 
 public static function add(Team $Team) {
-	Db::request("INSERT INTO Team (name) VALUES (\"" . $Team->getname() . "\")");
-	$Team->setid(Db::lastId());
+    //use DB::prepareRequest + add id_group field
+//	Db::request("INSERT INTO Team (name) VALUES (\"" . $Team->getname() . "\")");
+//	$Team->setid(Db::lastId());
 }
 
 public static function update(Team $Team) {
-	Db::request("UPDATE Team SET name=\"" . $Team->getname() . "\" WHERE id=\"" . $Team->getid() . "\"");
+    //use DB::prepareRequest + add id_group field
+//	Db::request("UPDATE Team SET name=\"" . $Team->getname() . "\" WHERE id=\"" . $Team->getid() . "\"");
 }
 
 public static function delete(Team $Team) {
-	Db::request("DELETE FROM Team WHERE id=\"" . $Team->getid() . "\"");
+    //use DB::prepareRequest + add id_group field
+//	Db::request("DELETE FROM Team WHERE id=\"" . $Team->getid() . "\"");
 }
 
 public static function find($id) {
-	$result = Db::request("SELECT * FROM Team WHERE id = \"" . $id . "\"");
-	return new Team($result->fetch(PDO::FETCH_NUM));
+    //use DB::prepareRequest + add id_group field
+//	$result = Db::request("SELECT * FROM Team WHERE id = \"" . $id . "\"");
+//	return new Team($result->fetch(PDO::FETCH_NUM));
 }
 
-public static function findAll($condition="") {
-	$result = Db::request("SELECT * FROM Team " . $condition . "");
-	return Db::createObjects('Team', $result->fetchAll(PDO::FETCH_NUM));
+public static function findAll($condition="",$values = array()) {
+	$statement = Db::prepareRequest("SELECT * FROM Team " . $condition);
+        $statement->execute($values);
+	return Db::createObjects('Team', $statement->fetchAll(PDO::FETCH_NUM));
 }
 
 public function getId() {
@@ -84,12 +90,20 @@ public function getName() {
 	return $this->name;
 }
 
+public function getFlag(){
+        return $this->flag;
+}
+
 public function setId($i) {
 	$this->id = $i;
 }
 
 public function setName($n) {
 	$this->name = $n;
+}
+
+public function setFlag($f) {
+	$this->flag = $f;
 }
 
 public function __toString() {

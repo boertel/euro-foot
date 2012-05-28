@@ -97,11 +97,16 @@ class Bet {
 	return new Bet($statement->fetch(PDO::FETCH_NUM));
     }
 
-    public static function findAll($condition = "") {
-	$result = Db::request("SELECT * FROM Bet " . $condition . "");
-	return Db::createObjects('Bet', $result->fetchAll(PDO::FETCH_NUM));
+    public static function findAll($condition = "", $values = array()) {
+	$statement = Db::prepareRequest("SELECT * FROM Bet " . $condition);
+        $statement->execute($values);
+	return Db::createObjects('Bet', $statement->fetchAll(PDO::FETCH_NUM));
     }
-
+    
+    public static function findAllBetsForUser(User $user) {
+        return Bet::findAll("WHERE user_id = :userId", array('userId'=>$user->getId()));
+    }
+    
     public function getId() {
 	return $this->id;
     }

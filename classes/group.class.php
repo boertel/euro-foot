@@ -71,9 +71,10 @@ public static function find($id) {
 	return new Group($result->fetch(PDO::FETCH_NUM));
 }
 
-public static function findAll($condition="") {
-	$result = Db::request("SELECT * FROM `Group` " . $condition);
-	return Db::createObjects('Group', $result->fetchAll(PDO::FETCH_NUM));
+public static function findAll($condition="",$values = array()) {
+	$statement = Db::prepareRequest("SELECT * FROM `Group` " . $condition);
+        $statement->execute($values);
+	return Db::createObjects('Group', $statement->fetchAll(PDO::FETCH_NUM));
 }
 
 public function getId() {
