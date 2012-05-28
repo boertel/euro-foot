@@ -44,4 +44,4 @@ INSERT INTO `game` (`id`, `id_group`, `team_a`, `team_b`, `score_a`, `score_b`, 
 (21, 3, 3, 5, NULL, NULL, '2012-06-18 19:45:00', NULL, NULL, NULL),
 (22, 3, 9, 8, NULL, NULL, '2012-06-18 19:45:00', NULL, NULL, NULL),
 (23, 4, 15, 6, NULL, NULL, '2012-06-19 19:45:00', NULL, NULL, NULL),
-(24, 4, 2, 16, NULL, NULL, '2012-06-18 19:45:00', NULL, NULL, NULL);
+(24, 4, 2, 16, NULL, NULL, '2012-06-19 19:45:00', NULL, NULL, NULL);
