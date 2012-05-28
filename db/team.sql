@@ -1,7 +1,7 @@
-CREATE TABLE `team` (
+CREATE TABLE IF NOT EXISTS `team` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`name` varchar(255) NOT NULL,
-        `flag` varchar(255) NOT NULL,F
+    `flag` varchar(255) NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=innoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 

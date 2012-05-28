@@ -11,7 +11,7 @@ CREATE TABLE `Game` (
     `stadium` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE (team_a, team_b),
-    FOREIGN KEY (`id_group`) REFERENCES group(id),
+    FOREIGN KEY (`id_group`) REFERENCES `group`(id),
     FOREIGN KEY (`team_a`) REFERENCES team(id),
     FOREIGN KEY (`team_b`) REFERENCES team(id)
 ) ENGINE=innoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
