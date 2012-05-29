@@ -33,9 +33,9 @@ $scope = $FACEBOOK_APP['scope'];
         <?php
         // Init the Facebook SDK
         $facebook = new Facebook(array(
-                    'appId' => $app_id,
-                    'secret' => $app_secret,
-                ));
+            'appId' => $app_id,
+            'secret' => $app_secret,
+        ));
 
         // Get the current user
         $facebookUser = $facebook->getUser();
@@ -45,7 +45,7 @@ $scope = $FACEBOOK_APP['scope'];
             $loginUrl = $facebook->getLoginUrl(array(
                 'scope' => $scope,
                 'redirect_uri' => $app_url,
-                    ));
+            ));
 
             print('<script> top.location.href=\'' . $loginUrl . '\'</script>');
         } else {
@@ -77,6 +77,8 @@ $scope = $FACEBOOK_APP['scope'];
 
             // From here the user is created in database, and the session is set with the server
             require "template/bets.php";
+
+            // Check if the user wins his bets.
         }
         ?>
     </body>
