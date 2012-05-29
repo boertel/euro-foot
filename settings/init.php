@@ -10,8 +10,6 @@ if ($_SERVER['REMOTE_ADDR'] == "127.0.0.1") {
     require 'settings/prod.private.php';
 }
 
-require 'utils.php';
-
 /* Autoload function to load automatically the php class when it's necessary
  * All classes should be in /classes/ and named classename.class.php
  */
