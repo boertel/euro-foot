@@ -76,10 +76,11 @@ class Game {
         //Db::request("DELETE FROM Game WHERE ");
     }
 
-    public static function find() {
-        //use DB::prepareRequest + add id_group field	
-        //        $result = Db::request("SELECT * FROM Game WHERE ");
-        //        return new Game($result->fetch(PDO::FETCH_NUM));
+    public static function find($gameId) {
+
+        $statement = Db::prepareRequest("SELECT * FROM Game WHERE id = :id");
+        $statement->execute(array('id' => (int) $gameId));
+        return new Game($statement->fetch(PDO::FETCH_NUM));
     }
 
     public static function findAll($condition = "", $values = array()) {
