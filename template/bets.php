@@ -14,16 +14,15 @@
         });
     }
 
-    function saveBet(idMatch){
+    function saveBet(gameId){
         $(document).ready(function() {
-            var idMatchScoreInput = '#matchScoreInput_'+idMatch;
-            var idMatchScore = '#matchScore_'+idMatch;
+            var idMatchScoreInput = '#matchScoreInput_'+gameId;
+            var idMatchScore = '#matchScore_'+gameId;
 
-            var scoreA = $('#scoreA_match_'+idMatch).val();
-            var scoreB = $('#scoreB_match_'+idMatch).val();
+            var scoreA = $('#scoreA_match_'+gameId).val();
+            var scoreB = $('#scoreB_match_'+gameId).val();
 
-            // AJAX ici pour modifier les scores
-            // $.post("modifier_score.php", { idMatch: idMatch, scoreA: scoreA, scoreB: scoreB} );
+            $.post("saveBet.php", { gameId: gameId, scoreA: scoreA, scoreB: scoreB});
 		
             $(idMatchScoreInput).hide();
 
@@ -63,7 +62,7 @@
                             <span class="matchDate">'.$game->getStart_date().'</span>
                             <span class="matchTeamA">'.$teamA->getName().' <img src="includes/pictures/flags/'.$teamA->getFlag().'"></span>';
                             if($currentUTCTimestamp < strtotime($game->getStart_date())){
-                                displayBetFormular($game->getId(),$game->getScore_a(),$game->getScore_b());
+                                displayBetFormular($game->getId(),$bet->getScore_a(),$bet->getScore_b());
                             } else {
                                 displayBetResult($game->getScore_a(),$game->getScore_b(),$bet->getScore_a(),$bet->getScore_b());
                             }
@@ -75,7 +74,6 @@
             
         function getGamesForGroup($games, $groupId){
             $gamesForThisGroup = array();
-            // var_dump($games);
             foreach($games as $game){
                 if($game->getId_group() == $groupId){
                     array_push($gamesForThisGroup, $game);
@@ -104,15 +102,15 @@
             return new Bet(null,null,null,null,null); // return an empty bet if none is found (i.e. user didn't bet on this match)
         }
         
-        function displayBetFormular($gameId,$scoreTeamA, $scoreTeamB){
-            echo '<span id="matchScore_'.$gameId.'" class="matchScore" title="Modifier le paris" onclick="modifyBet('.$gameId.')">Pari : '.$scoreTeamA.' - '.$scoreTeamB.'</span>
+        function displayBetFormular($gameId, $betScoreTeamA, $betScoreTeamB){
+            echo '<span id="matchScore_'.$gameId.'" class="matchScore" title="Modifier le paris" onclick="modifyBet('.$gameId.')">Pari : '.$betScoreTeamB.' - '.$betScoreTeamB.'</span>
                   <span id="matchScoreInput_'.$gameId.'" class="matchScoreInput">
                     <select id="scoreA_match_'.$gameId.'" name="scoreA_match_'.$gameId.'">';
-                        displayPossibleScores($scoreTeamA);
+                        displayPossibleScores($betScoreTeamA);
                     echo '</select>
                         - 
                     <select id="scoreB_match_'.$gameId.'" name="scoreB_match_'.$gameId.'">';
-                        displayPossibleScores($scoreTeamB);
+                        displayPossibleScores($betScoreTeamB);
                     echo '</select>
                     <button id="saveButton" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                             role="button" aria-disabled="false" onclick="saveBet('.$gameId.')">

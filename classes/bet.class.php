@@ -60,10 +60,10 @@ class Bet {
      * @return bool true on success or false on failure. 
      */
     public static function add(Bet $Bet) {
-	$statement = Db::prepareRequest("INSERT INTO Bet (match_id, user_id, score_a, score_b)"
-				." VALUES (:matchId, :userId, :scoreA, :scoreB)");
+	$statement = Db::prepareRequest("INSERT INTO Bet (game_id, user_id, score_a, score_b)"
+				." VALUES (:gameId, :userId, :scoreA, :scoreB)");
 	
-	$result = $statement->execute(array('matchId' => $Bet->getmatch_id(), 'userId' => $Bet->getuser_id(), 
+	$result = $statement->execute(array('gameId' => $Bet->getmatch_id(), 'userId' => $Bet->getuser_id(), 
 	    'scoreA' => $Bet->getscore_a(), 'scoreB' => $Bet->getscore_b()));
 	
 	$Bet->setid(Db::lastId());
@@ -76,9 +76,9 @@ class Bet {
      * @return bool true on success or false on failure. 
      */
     public static function update(Bet $Bet) {
-	$statement = Db::prepareRequest("UPDATE Bet SET match_id = :matchId, user_id = :userId, score_a = :scoreA,"
+	$statement = Db::prepareRequest("UPDATE Bet SET game_id = :gameId, user_id = :userId, score_a = :scoreA,"
 					." score_b = :scoreB WHERE id= :id");
-	return $statement->execute(array('matchId' => $Bet->getmatch_id(), 'userId' => $Bet->getuser_id(), 'scoreA' => $Bet->getscore_a(), 'scoreB' => $Bet->getscore_b(), "id" => $Bet->getId()));
+	return $statement->execute(array('gameId' => $Bet->getmatch_id(), 'userId' => $Bet->getuser_id(), 'scoreA' => $Bet->getscore_a(), 'scoreB' => $Bet->getscore_b(), "id" => $Bet->getId()));
     }
     
     /**
@@ -104,7 +104,11 @@ class Bet {
     }
     
     public static function findAllBetsForUser(User $user) {
-        return Bet::findAll("WHERE user_id = :userId", array('userId'=>$user->getId()));
+        return Bet::findAll("WHERE user_id = :userId", array('userId' => (int) $user->getId()));
+    }
+    
+    public static function findBetByGameIdForUser($matchId, User $user) {
+        return Bet::findAll("WHERE user_id = :userId AND game_id = :gameId", array('gameId' => (int) $matchId, 'userId'=>$user->getId()));
     }
     
     public function getId() {

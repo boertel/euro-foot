@@ -2,9 +2,6 @@
 require 'settings/init.php';
 require 'facebook-sdk/facebook.php';
 
-
-$title = "Euro Foot 2012";
-
 $app_id = $FACEBOOK_APP['id'];
 $app_secret = $FACEBOOK_APP['secret'];
 $app_url = $FACEBOOK_APP['url'];
@@ -15,7 +12,7 @@ $scope = $FACEBOOK_APP['scope'];
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title><?php echo $title; ?></title>
+        <title>Euro 2012 - À vos paris</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script type="text/javascript" src="includes/js/jquery-1.7.2.min.js"></script>
         <script type="text/javascript" src="includes/js/jquery-ui-1.8.20.custom.min.js"></script>
