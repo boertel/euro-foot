@@ -2,6 +2,7 @@
 require 'settings/init.php';
 require 'facebook-sdk/facebook.php';
 
+$title = 'Euro 2012 - À vos paris';
 $app_id = $FACEBOOK_APP['id'];
 $app_secret = $FACEBOOK_APP['secret'];
 $app_url = $FACEBOOK_APP['url'];
@@ -12,7 +13,7 @@ $scope = $FACEBOOK_APP['scope'];
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Euro 2012 - À vos paris</title>
+        <title><?php echo $title; ?></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script type="text/javascript" src="includes/js/jquery-1.7.2.min.js"></script>
         <script type="text/javascript" src="includes/js/jquery-ui-1.8.20.custom.min.js"></script>
@@ -26,13 +27,45 @@ $scope = $FACEBOOK_APP['scope'];
         </style>
     </head>
     <body>
+        <div id="fb-root"></div>
+        <script src="http://connect.facebook.net/en_US/all.js"></script>
+        <script type="text/javascript">
+            FB.init({
+                appId  : '<?php echo $app_id; ?>',
+                frictionlessRequests: false
+            });
+
+            function sendRequestViaMultiFriendSelector() {
+                FB.ui({method: 'apprequests',
+                    title: '<?php echo $title;?>',
+                    message: 'Parie sur les match de l\'Euro 2012 et deviens le meilleur de tes amis !',
+                }, requestCallback);
+            }
+      
+            function requestCallback(response) {
+                // Handle callback here
+            }
+        </script>
 
         <?php
         // Init the Facebook SDK
         $facebook = new Facebook(array(
-            'appId' => $app_id,
-            'secret' => $app_secret,
-        ));
+                    'appId' => $app_id,
+                    'secret' => $app_secret,
+                ));
+
+        // Handle the facebook request (like someone accepting the invite of a friend)
+        if (isset($_REQUEST['request_ids'])) {
+            $requestIDs = explode(',', $_REQUEST['request_ids']);
+            foreach ($requestIDs as $requestID) {
+                try {
+                    $delete_success = $facebook->api('/' . $requestID, 'DELETE');
+                } catch (FacebookAPIException $e) {
+                    // ignore error
+                    // error_log($e);
+                }
+            }
+        }
 
         // Get the current user
         $facebookUser = $facebook->getUser();
@@ -42,7 +75,7 @@ $scope = $FACEBOOK_APP['scope'];
             $loginUrl = $facebook->getLoginUrl(array(
                 'scope' => $scope,
                 'redirect_uri' => $app_url,
-            ));
+                    ));
 
             print('<script> top.location.href=\'' . $loginUrl . '\'</script>');
         } else {
