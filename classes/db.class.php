@@ -1,6 +1,14 @@
 <?php
 
-require_once 'settings/dev.php';
+set_include_path(get_include_path() . PATH_SEPARATOR . $_SERVER['DOCUMENT_ROOT']);
+
+if ($_SERVER['REMOTE_ADDR'] == "127.0.0.1") {
+    require 'settings/dev.php';
+    require 'settings/dev.private.php';
+} else {
+    require 'settings/prod.php';
+    require 'settings/prod.private.php';
+}
 
 /*
  * @date : 26/10/2009 20:13
