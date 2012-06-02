@@ -1,5 +1,6 @@
 <?php require 'settings/init.php';
-$title = 'Euro 2012 - À vos paris';?>
+$title = 'Euro 2012 - À vos paris';
+?>
 
 <!DOCTYPE HTML>
 <html lang="en">
@@ -14,17 +15,22 @@ $title = 'Euro 2012 - À vos paris';?>
     </head>
     <body>
         <div id="fb-root"></div>
-        <?php 
+        <?php
         // INCLUDE score update here, before header
         ?>
         <div id="header">
             <div id="userProfilBackground"></div>
             <div id="userProfilData">
-                <?php if(Session::getInstance()->isUserConnected()){
+                <?php
+                if (Session::getInstance()->isUserConnected()) {
                     $user = Session::getInstance()->getUserSession();
-                    echo '<p class="center bold title">'.$user->getFirst_name().' '.$user->getLast_name().'</p>';
-                    echo '<p class="score">Score : <span class="bold">'.$user->getScore().'</span></p>';
-                }?>
+                    echo '<p class="center bold title">' . $user->getFirst_name() . ' ' . $user->getLast_name() . '</p>';
+                    echo '<p class="score">Score : <span class="bold">' . $user->getScore() . '</span></p>';
+                }
+                ?>
+                <p>
+                    <a href="#" class="FBButton" onclick="sendRequestViaMultiFriendSelector(); return false;">Invitez vos amis</a>
+                </p>
             </div>
         </div>
         <script src="http://connect.facebook.net/en_US/all.js"></script>
@@ -36,7 +42,7 @@ $title = 'Euro 2012 - À vos paris';?>
 
             function sendRequestViaMultiFriendSelector() {
                 FB.ui({method: 'apprequests',
-                    title: '<?php echo $title;?>',
+                    title: '<?php echo $title; ?>',
                     message: 'Parie sur les match de l\'Euro 2012 et deviens le meilleur de tes amis !',
                 }, requestCallback);
             }
@@ -46,8 +52,8 @@ $title = 'Euro 2012 - À vos paris';?>
             }
         </script>
         <?php
-            // Include the tab to bet
-            require "template/bets.php";      
+        // Include the tab to bet
+        require "template/bets.php";
         ?>
         <div id="footer"></div>
         <p class="center">Design by <a href="http://www.dinozef-design.fr" title="Dinozef Design, créations graphiques" target="_blank">Simon</a></p>

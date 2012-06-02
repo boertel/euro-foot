@@ -9,12 +9,12 @@ small, strike, strong, sub, sup, tt, var,
 b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend, caption {
-margin: 0;
-padding: 0;
-border: 0;
-outline: 0;
-vertical-align: baseline;
-background: transparent;}
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    vertical-align: baseline;
+    background: transparent;}
 
 .clear{clear:both;border:none;margin:0px;}
 
@@ -25,35 +25,35 @@ background: transparent;}
 a img{border:0px;}
 
 html,body{
-width:760px;
-margin-left:auto;
-margin-right:auto;
-font-family: Verdana, Arial, Helvetica, sans-serif;
-font-size: 11px;}
+    width:760px;
+    margin-left:auto;
+    margin-right:auto;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;}
 
 #header{
- position: relative;
- width: 760px;
- height:200px;
- background-image: url(pictures/header-euro-2012.png);   
+    position: relative;
+    width: 760px;
+    height:200px;
+    background-image: url(pictures/header-euro-2012.png);   
 }
 
 #userProfilBackground,#userProfilData{
-position: absolute;
-right: 0px;
-top: 25px;
-height: 130px; /** 150 - padding*2*/
-width: 230px; /** 250 - padding*2*/
-padding: 10px;
+    position: absolute;
+    right: 0px;
+    top: 25px;
+    height: 130px; /** 150 - padding*2*/
+    width: 230px; /** 250 - padding*2*/
+    padding: 10px;
 }
 
 #userProfilBackground{
-background-color: #fff;
-opacity : 0.8;
--moz-opacity : 0.8;
--ms-filter: "alpha(opacity=80)"; /* IE 8 */
-filter : alpha(opacity=80); /* IE < 8 */
-border-radius: 10px 0 0 10px;
+    background-color: #fff;
+    opacity : 0.8;
+    -moz-opacity : 0.8;
+    -ms-filter: "alpha(opacity=80)"; /* IE 8 */
+    filter : alpha(opacity=80); /* IE < 8 */
+    border-radius: 10px 0 0 10px;
 }
 
 #userProfilData .title{
@@ -70,9 +70,54 @@ border-radius: 10px 0 0 10px;
 }
 
 #footer{
- width: 760px;
- height:150px;
- background-image: url(pictures/footer-euro-2012.png);   
+    width: 760px;
+    height:150px;
+    background-image: url(pictures/footer-euro-2012.png);   
+}
+
+.FBButton{
+    display: inline-block;
+
+    height: 15px;
+    padding: 5px;
+
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+
+    background-image: linear-gradient(bottom, rgb(0,102,153) 27%, rgb(0,153,204) 100%);
+    background-image: -o-linear-gradient(bottom, rgb(0,102,153) 27%, rgb(0,153,204) 100%);
+    background-image: -moz-linear-gradient(bottom, rgb(0,102,153) 27%, rgb(0,153,204) 100%);
+    background-image: -webkit-linear-gradient(bottom, rgb(0,102,153) 27%, rgb(0,153,204) 100%);
+    background-image: -ms-linear-gradient(bottom, rgb(0,102,153) 27%, rgb(0,153,204) 100%);
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0.27, rgb(0,102,153)),
+        color-stop(1, rgb(0,153,204))
+    );
+
+
+    border-radius: 3px 3px 3px 3px;
+    border: solid 1px #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.FBButton:hover{
+    background-image: linear-gradient(bottom, rgb(0,102,153) 27%, rgb(51,153,255) 100%);
+    background-image: -o-linear-gradient(bottom, rgb(0,102,153) 27%, rgb(51,153,255) 100%);
+    background-image: -moz-linear-gradient(bottom, rgb(0,102,153) 27%, rgb(51,153,255) 100%);
+    background-image: -webkit-linear-gradient(bottom, rgb(0,102,153) 27%, rgb(51,153,255) 100%);
+    background-image: -ms-linear-gradient(bottom, rgb(0,102,153) 27%, rgb(51,153,255) 100%);
+
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0.27, rgb(0,102,153)),
+        color-stop(1, rgb(51,153,255))
+        );
 }
 
 
@@ -120,10 +165,10 @@ border-radius: 10px 0 0 10px;
 }
 
 .match .matchScoreInput{
-  cursor: default;
-  border:none;
-  background:none;
-  display: none;
+    cursor: default;
+    border:none;
+    background:none;
+    display: none;
 }
 .win{
     background-color: #8ae234;
