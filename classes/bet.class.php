@@ -12,28 +12,30 @@ class Bet {
     private $user_id;
     private $score_a;
     private $score_b;
+    private $validatedl
 
     public function __construct() {
-	$argc = func_num_args();
-	$args = func_get_args();
+        $argc = func_num_args();
+        $args = func_get_args();
 
-	if ($argc == 1 && getType($args[0]) == "array") {
-	    $this->createObjectWithArray($args[0]);
-	} else if ($argc == 5) {
-	    $this->createObject($args[0], $args[1], $args[2], $args[3], $args[4]);
-	} else if ($argc == 4) {
-	    $this->createObjectWithoutPrimaryKey($args[0], $args[1], $args[2], $args[3]);
-	} else {
-	    throw new IllegalArgumentException("wrong number of arguments");
-	}
+        if ($argc == 1 && getType($args[0]) == "array") {
+            $this->createObjectWithArray($args[0]);
+        } else if ($argc == 6) {
+            $this->createObject($args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
+        } else if ($argc == 5) {
+            $this->createObjectWithoutPrimaryKey($args[0], $args[1], $args[2], $args[3], $args[4]);
+        } else {
+            throw new IllegalArgumentException("wrong number of arguments");
+        }
     }
 
-    protected function createObject($id, $match_id, $user_id, $score_a, $score_b) {
-	$this->id = $id;
-	$this->match_id = $match_id;
-	$this->user_id = $user_id;
-	$this->score_a = $score_a;
-	$this->score_b = $score_b;
+    protected function createObject($id, $match_id, $user_id, $score_a, $score_b, $validated) {
+        $this->id = $id;
+        $this->match_id = $match_id;
+        $this->user_id = $user_id;
+        $this->score_a = $score_a;
+        $this->score_b = $score_b;
+        $this->validated = $validated;
     }
 
     protected function createObjectWithoutPrimaryKey($match_id, $user_id, $score_a, $score_b) {

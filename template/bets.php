@@ -35,6 +35,13 @@
 <!--<p>
     <a href="#" onclick="sendRequestViaMultiFriendSelector(); return false;">Invitez vos amis</a>
 </p>-->
+
+<?php
+    $user = Session::getInstance()->getUserSession();
+    $result = Db::request("SELECT * FROM bet b JOIN Game g ON g.id = b.game_id WHERE g.score_a != NULL AND g.score_b != NULL AND b.user_id = " . $user->getId() . " AND b.validated = false");
+    echo "result:" . $result->fetch(PDO::FETCH_NUM);
+?>
+
 <!-- Tabs -->
 <div id="groupes">
     <ul>
@@ -43,7 +50,7 @@
         $games = Game::findAll();
         $teams = Team::findAll();
         $bets = Bet::findAllBetsForUser(Session::getInstance()->getUserSession());
-        $currentUTCTimestamp =  gmmktime();
+        $currentUTCTimestamp = gmmktime();
             
         for($i = 0; $i < sizeof($groups);$i++){
             echo '<li><a href="#groupe'.$groups[$i]->getId().'">'.$groups[$i]->getTitle().'</a></li>';
