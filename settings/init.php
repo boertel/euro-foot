@@ -16,6 +16,58 @@ $app_id = $FACEBOOK_APP['id'];
 $app_secret = $FACEBOOK_APP['secret'];
 $app_url = $FACEBOOK_APP['url'];
 $scope = $FACEBOOK_APP['scope'];
+$code = $_REQUEST["code"];
+
+function fb_permissions() {
+    global $app_id, $app_url, $scope;
+    $dialog_url = "https://www.facebook.com/dialog/oauth?client_id=" 
+    . $app_id . "&redirect_uri=" . urlencode($app_url) . "&scope=" . $scope;
+
+    echo("<script> top.location.href='" . $dialog_url . "'</script>");
+}
+
+if(empty($code)) {
+    fb_permissions();
+} else {
+    $token_url = "https://graph.facebook.com/oauth/access_token?"
+      . "client_id=" . $app_id . "&redirect_uri=" . urlencode($app_url)
+      . "&client_secret=" . $app_secret . "&code=" . $code;
+
+    $response = file_get_contents($token_url);
+    if (empty($response)) {
+        fb_permissions();
+    } else {
+
+        $params = null;
+        parse_str($response, $params);
+
+        $graph_url = "https://graph.facebook.com/me?access_token=" 
+          . $params['access_token'];
+
+        $fb_user = json_decode(file_get_contents($graph_url));
+
+         // try to find if user exist in database
+        $username = $fb_user->username;
+        $user = User::findUsername($username);
+
+        // create a user in database if not
+        if ($user == null) {
+            $last_name = $fb_user->last_name;
+            $first_name = $fb_user->first_name;
+            $email = $fb_user->email;
+            $token = $params['access_token'];
+            $score = 0;
+
+            $newUser = new User($username, $first_name, $last_name, $email, $token, $score);
+            User::add($newUser);
+
+            Session::getInstance()->setUserSession($newUser);
+        } else {
+            $user[0]->setToken($params['access_token']);
+            Session::getInstance()->setUserSession($user[0]);
+        }
+    }
+}
 
 /* Autoload function to load automatically the php class when it's necessary
  * All classes should be in /classes/ and named classename.class.php
@@ -49,44 +101,4 @@ if (isset($_REQUEST['request_ids'])) {
     }
 }
 
-// Get the current user
-$facebookUser = $facebook->getUser();
-
-// If the user has not installed the app, redirect them to the Auth Dialog
-if (!$facebookUser) {
-    $loginUrl = $facebook->getLoginUrl(array(
-        'scope' => $scope,
-        'redirect_uri' => $app_url,
-            ));
-
-    print('<script> top.location.href=\'' . $loginUrl . '\'</script>');
-    //exit();
-}
-
-$userProfile = $facebook->api("/me");
-$username = $userProfile["username"];
-
-// set a user session if not
-if (!Session::getInstance()->isUserConnected()) {
-    // try to find if user exist in database
-    $user = User::findUsername($username);
-
-    // create a user in database if not
-    if ($user == null) {
-        $last_name = $userProfile["last_name"];
-        $first_name = $userProfile["first_name"];
-        $email = $userProfile["email"];
-        $token = "???";
-        $score = 0;
-
-        $newUser = new User($username, $first_name, $last_name, $email, $token, $score);
-        User::add($newUser);
-
-        Session::getInstance()->setUserSession($newUser);
-    } else {
-        Session::getInstance()->setUserSession($user[0]);
-    }
-}
-
-// From here the user is created in database, and the session is set with the server
 ?>
