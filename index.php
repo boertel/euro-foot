@@ -50,6 +50,6 @@ $title = 'Euro 2012 - À vos paris';?>
             require "template/bets.php";      
         ?>
         <div id="footer"></div>
-        <p class="center">Design by <a href="http://www.dinozef-design.fr" title="Dinozef Design, créations graphiques">Simon</a></p>
+        <p class="center">Design by <a href="http://www.dinozef-design.fr" title="Dinozef Design, créations graphiques" target="_blank">Simon</a></p>
     </body>
 </html>
