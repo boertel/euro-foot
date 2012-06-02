@@ -35,6 +35,34 @@
 <!--<p>
     <a href="#" onclick="sendRequestViaMultiFriendSelector(); return false;">Invitez vos amis</a>
 </p>-->
+
+<?php
+    $user = Session::getInstance()->getUserSession();
+    $result = Db::request("SELECT g.score_a as game_score_a, g.score_b as game_score_b, b.score_a as bet_score_a, b.score_b as bet_score_b FROM bet b JOIN Game g ON g.id = b.game_id WHERE g.score_a is not NULL AND g.score_b is not NULL AND b.user_id = " . $user->getId() . " AND b.validated = false");
+    $bets = $result->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($bets as $bet) {
+        $points = 0;
+        $betScoreTeamA = $bet['bet_score_a'];
+        $betScoreTeamB = $bet['bet_score_b'];
+        $scoreTeamA = $bet['game_score_a'];
+        $scoreTeamB = $bet['game_score_b'];
+
+        if($betScoreTeamA == null && $betScoreTeamB == null){
+            $points = $POINTS['lost']; 
+        }
+        else if($scoreTeamA == $betScoreTeamA && $scoreTeamB == $betScoreTeamB) {
+            $points = $POINTS['perfect'];
+        } else if (($scoreTeamA > $scoreTeamB && $betScoreTeamA > $betScoreTeamB) 
+                    || ($scoreTeamA == $scoreTeamB && $betScoreTeamA == $betScoreTeamB) 
+                    || ($scoreTeamA < $scoreTeamB && $betScoreTeamA < $betScoreTeamB)){
+            $points = $POINTS['win'];
+        } else {
+            $points = $POINTS['lost'];
+        }
+        echo $points . ' ';
+    }
+?>
+
 <!-- Tabs -->
 <div id="groupes">
     <ul>
@@ -43,7 +71,7 @@
         $games = Game::findAll();
         $teams = Team::findAll();
         $bets = Bet::findAllBetsForUser(Session::getInstance()->getUserSession());
-        $currentUTCTimestamp =  gmmktime();
+        $currentUTCTimestamp = gmmktime();
             
         for($i = 0; $i < sizeof($groups);$i++){
             echo '<li><a href="#groupe'.$groups[$i]->getId().'">'.$groups[$i]->getTitle().'</a></li>';
@@ -106,7 +134,7 @@
         }
         
         function displayBetFormular($gameId, $betScoreTeamA, $betScoreTeamB){
-            echo '<span id="matchScore_'.$gameId.'" class="matchScore" title="Modifier le paris" onclick="modifyBet('.$gameId.')">Pari : '.$betScoreTeamB.' - '.$betScoreTeamB.'</span>
+            echo '<span id="matchScore_'.$gameId.'" class="matchScore" title="Modifier le paris" onclick="modifyBet('.$gameId.')">Pari : '.$betScoreTeamA.' - '.$betScoreTeamB.'</span>
                   <span id="matchScoreInput_'.$gameId.'" class="matchScoreInput">
                     <select id="scoreA_match_'.$gameId.'" name="scoreA_match_'.$gameId.'">';
                         displayPossibleScores($betScoreTeamA);

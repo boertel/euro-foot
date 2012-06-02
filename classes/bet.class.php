@@ -12,42 +12,44 @@ class Bet {
     private $user_id;
     private $score_a;
     private $score_b;
+    private $validated;
 
     public function __construct() {
-	$argc = func_num_args();
-	$args = func_get_args();
+        $argc = func_num_args();
+        $args = func_get_args();
 
-	if ($argc == 1 && getType($args[0]) == "array") {
-	    $this->createObjectWithArray($args[0]);
-	} else if ($argc == 5) {
-	    $this->createObject($args[0], $args[1], $args[2], $args[3], $args[4]);
-	} else if ($argc == 4) {
-	    $this->createObjectWithoutPrimaryKey($args[0], $args[1], $args[2], $args[3]);
-	} else {
-	    throw new IllegalArgumentException("wrong number of arguments");
-	}
+        if ($argc == 1 && getType($args[0]) == "array") {
+            $this->createObjectWithArray($args[0]);
+        } else if ($argc == 6) {
+            $this->createObject($args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
+        } else if ($argc == 5) {
+            $this->createObjectWithoutPrimaryKey($args[0], $args[1], $args[2], $args[3], $args[4]);
+        } else {
+            throw new IllegalArgumentException("wrong number of arguments");
+        }
     }
 
-    protected function createObject($id, $match_id, $user_id, $score_a, $score_b) {
-	$this->id = $id;
-	$this->match_id = $match_id;
-	$this->user_id = $user_id;
-	$this->score_a = $score_a;
-	$this->score_b = $score_b;
+    protected function createObject($id, $match_id, $user_id, $score_a, $score_b, $validated) {
+        $this->id = $id;
+        $this->match_id = $match_id;
+        $this->user_id = $user_id;
+        $this->score_a = $score_a;
+        $this->score_b = $score_b;
+        $this->validated = $validated;
     }
 
-    protected function createObjectWithoutPrimaryKey($match_id, $user_id, $score_a, $score_b) {
+    protected function createObjectWithoutPrimaryKey($match_id, $user_id, $score_a, $score_b, $validated) {
 	$id = null;
-	$this->createObject($id, $match_id, $user_id, $score_a, $score_b);
+	$this->createObject($id, $match_id, $user_id, $score_a, $score_b, $validated);
     }
 
     protected function createObjectWithArray($array) {
 	$numAttributes = count($array);
-	if ($numAttributes == 5) {
-		$this->createObject($array[0],$array[1],$array[2],$array[3],$array[4]);
+	if ($numAttributes == 6) {
+		$this->createObject($array[0],$array[1],$array[2],$array[3],$array[4], $array[5]);
 	}
-	else if ($numAttributes == 4) {
-		$this->createObjectWithoutPrimaryKey($array[0],$array[1],$array[2],$array[3]);
+	else if ($numAttributes == 5) {
+		$this->createObjectWithoutPrimaryKey($array[0],$array[1],$array[2],$array[3], $array[4]);
 	}
 	else {
 	    throw new IllegalArgumentException("wrong number of arguments");
@@ -60,14 +62,14 @@ class Bet {
      * @return bool true on success or false on failure. 
      */
     public static function add(Bet $Bet) {
-	$statement = Db::prepareRequest("INSERT INTO Bet (game_id, user_id, score_a, score_b)"
-				." VALUES (:gameId, :userId, :scoreA, :scoreB)");
-	
-	$result = $statement->execute(array('gameId' => $Bet->getmatch_id(), 'userId' => $Bet->getuser_id(), 
-	    'scoreA' => $Bet->getscore_a(), 'scoreB' => $Bet->getscore_b()));
-	
-	$Bet->setid(Db::lastId());
-	return $result;
+        $statement = Db::prepareRequest("INSERT INTO Bet (game_id, user_id, score_a, score_b)"
+                    ." VALUES (:gameId, :userId, :scoreA, :scoreB, :validated)");
+        
+        $result = $statement->execute(array('gameId' => $Bet->getmatch_id(), 'userId' => $Bet->getuser_id(), 
+            'scoreA' => $Bet->getscore_a(), 'scoreB' => $Bet->getscore_b(), 'validated' => $Bet->getValidated()));
+        
+        $Bet->setid(Db::lastId());
+        return $result;
     }
 
     /**
@@ -76,9 +78,9 @@ class Bet {
      * @return bool true on success or false on failure. 
      */
     public static function update(Bet $Bet) {
-	$statement = Db::prepareRequest("UPDATE Bet SET game_id = :gameId, user_id = :userId, score_a = :scoreA,"
-					." score_b = :scoreB WHERE id= :id");
-	return $statement->execute(array('gameId' => $Bet->getmatch_id(), 'userId' => $Bet->getuser_id(), 'scoreA' => $Bet->getscore_a(), 'scoreB' => $Bet->getscore_b(), "id" => $Bet->getId()));
+        $statement = Db::prepareRequest("UPDATE Bet SET game_id = :gameId, user_id = :userId, score_a = :scoreA,"
+                        ." score_b = :scoreB, validated = :validated WHERE id= :id");
+        return $statement->execute(array('gameId' => $Bet->getmatch_id(), 'userId' => $Bet->getuser_id(), 'scoreA' => $Bet->getscore_a(), 'scoreB' => $Bet->getscore_b(), 'validated' => $Bet->getValidated(), "id" => $Bet->getId()));
     }
     
     /**
@@ -131,6 +133,10 @@ class Bet {
 	return $this->score_b;
     }
 
+    public function getValidated() {
+        return $this->validated;
+    }
+
     public function setId($i) {
 	$this->id = $i;
     }
@@ -158,6 +164,7 @@ class Bet {
 	$view .= "\tuser_id : " . $this->user_id . ";\n";
 	$view .= "\tscore_a : " . $this->score_a . ";\n";
 	$view .= "\tscore_b : " . $this->score_b . ";\n";
+	$view .= "\tvalidated : " . $this->validated . ";\n";
 	$view .= "}";
 	return $view;
     }
