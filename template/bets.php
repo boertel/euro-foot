@@ -59,7 +59,10 @@
         } else {
             $points = $POINTS['lost'];
         }
-        echo $points . ' ';
+        echo $facebook->getAccessToken();
+        $response = $facebook->api('/' . $facebook->getUser() . '/scores', 'post', array('score' => 20));
+        echo "response";
+        print($response);
     }
 ?>
 
