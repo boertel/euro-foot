@@ -16,7 +16,11 @@ $app_id = $FACEBOOK_APP['id'];
 $app_secret = $FACEBOOK_APP['secret'];
 $app_url = $FACEBOOK_APP['url'];
 $scope = $FACEBOOK_APP['scope'];
-$code = $_REQUEST["code"];
+if(isset($_REQUEST["code"])){
+    $code = $_REQUEST["code"];   
+}else{
+    $code="";
+}
 
 // Helper function to get an APP ACCESS TOKEN
 function get_app_access_token($app_id, $app_secret) {
@@ -31,8 +35,7 @@ function get_app_access_token($app_id, $app_secret) {
     return  $params['access_token'];
 }
 
-function fb_permissions() {
-    global $app_id, $app_url, $scope;
+function fb_permissions($app_id,$app_url,$scope) {
     $dialog_url = "https://www.facebook.com/dialog/oauth?client_id=" 
     . $app_id . "&redirect_uri=" . urlencode($app_url) . "&scope=" . $scope;
 
@@ -40,7 +43,7 @@ function fb_permissions() {
 }
 
 if(empty($code)) {
-    fb_permissions();
+    fb_permissions($app_id,$app_url,$scope);
 } else {
     $token_url = "https://graph.facebook.com/oauth/access_token?"
       . "client_id=" . $app_id . "&redirect_uri=" . urlencode($app_url)
