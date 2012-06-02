@@ -34,7 +34,7 @@
 
 <?php
     $user = Session::getInstance()->getUserSession();
-    $result = Db::request("SELECT g.score_a as game_score_a, g.score_b as game_score_b, b.score_a as bet_score_a, b.score_b as bet_score_b FROM bet b JOIN Game g ON g.id = b.game_id WHERE g.score_a is not NULL AND g.score_b is not NULL AND b.user_id = " . $user->getId() . " AND b.validated = false");
+    $result = Db::request("SELECT b.id as bet_id, g.score_a as game_score_a, g.score_b as game_score_b, b.score_a as bet_score_a, b.score_b as bet_score_b FROM bet b JOIN Game g ON g.id = b.game_id WHERE g.score_a is not NULL AND g.score_b is not NULL AND b.user_id = " . $user->getId() . " AND b.validated = false");
     $bets = $result->fetchAll(PDO::FETCH_ASSOC);
     foreach ($bets as $bet) {
         $points = 0;
@@ -55,10 +55,10 @@
         } else {
             $points = $POINTS['lost'];
         }
-        echo $facebook->getAccessToken();
         $response = $facebook->api('/' . $facebook->getUser() . '/scores', 'post', array('score' => 20));
-        echo "response";
-        print($response);
+        Db::request("UPDATE bet SET validated = true WHERE id = " . $bet['bet_id'] . ""); 
+        $user = Session::getInstance()->getUserSession();
+        Db::request("UPDATE user SET score = score + " . $points . " WHERE id = " . $user->getId() . "");
     }
 ?>
 
