@@ -59,7 +59,11 @@ class Db extends PDO {
 	*le constructeur est en public car il faut qu'il respecte la signature de la classe PDO
 	*/
 	public function __construct($host, $dbName, $user, $pass) {
-		self::$connection = parent::__construct("mysql:host=$host;dbname=$dbName", $user, $pass);
+        $dsn = "mysql:host=$host;dbname=$dbName";
+        if (isset($DATABASE['port'])) {
+            $dsn .= ";port=" . $DATABASE['port'];
+        }
+		self::$connection = parent::__construct($dsn, $user, $pass);
 		$this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 	

@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) COLLATE utf8mb4_bin NOT NULL,
+  `title` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 )  ENGINE=innoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
