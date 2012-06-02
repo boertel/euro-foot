@@ -32,9 +32,9 @@
     }
 </script>
 
-<p>
+<!--<p>
     <a href="#" onclick="sendRequestViaMultiFriendSelector(); return false;">Invitez vos amis</a>
-</p>
+</p>-->
 <!-- Tabs -->
 <div id="groupes">
     <ul>

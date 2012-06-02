@@ -31,6 +31,50 @@ margin-right:auto;
 font-family: Verdana, Arial, Helvetica, sans-serif;
 font-size: 11px;}
 
+#header{
+ position: relative;
+ width: 760px;
+ height:200px;
+ background-image: url(pictures/header-euro-2012.png);   
+}
+
+#userProfilBackground,#userProfilData{
+position: absolute;
+right: 0px;
+top: 25px;
+height: 130px; /** 150 - padding*2*/
+width: 230px; /** 250 - padding*2*/
+padding: 10px;
+}
+
+#userProfilBackground{
+background-color: #fff;
+opacity : 0.8;
+-moz-opacity : 0.8;
+-ms-filter: "alpha(opacity=80)"; /* IE 8 */
+filter : alpha(opacity=80); /* IE < 8 */
+border-radius: 10px 0 0 10px;
+}
+
+#userProfilData .title{
+    font-size: 14px;
+}
+
+#userProfilData .score{
+    background-image: url(pictures/icon_score.png);
+    background-repeat: no-repeat;
+    background-position: 5px 0px;
+    height: 25px;
+    padding-left: 25px;
+    padding-top: 2px;
+}
+
+#footer{
+ width: 760px;
+ height:150px;
+ background-image: url(pictures/footer-euro-2012.png);   
+}
+
 
 .match{
     padding-top: 5px;
