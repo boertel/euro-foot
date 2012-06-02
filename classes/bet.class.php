@@ -62,7 +62,7 @@ class Bet {
      * @return bool true on success or false on failure. 
      */
     public static function add(Bet $Bet) {
-        $statement = Db::prepareRequest("INSERT INTO Bet (game_id, user_id, score_a, score_b)"
+        $statement = Db::prepareRequest("INSERT INTO Bet (game_id, user_id, score_a, score_b, validated)"
                     ." VALUES (:gameId, :userId, :scoreA, :scoreB, :validated)");
         
         $result = $statement->execute(array('gameId' => $Bet->getmatch_id(), 'userId' => $Bet->getuser_id(), 

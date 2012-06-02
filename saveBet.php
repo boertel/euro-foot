@@ -11,7 +11,7 @@ if (Session::getInstance()->isUserConnected()) {
     if ($currentUTCTimestamp < strtotime($game->getStart_date())) {
         $betForThisMatch = Bet::findBetByGameIdForUser($_POST['gameId'], Session::getInstance()->getUserSession());
         if ($betForThisMatch == null) {
-            $bet = new Bet($_POST['gameId'], Session::getInstance()->getUserSession()->getId(), $_POST['scoreA'], $_POST['scoreB']);
+            $bet = new Bet($_POST['gameId'], Session::getInstance()->getUserSession()->getId(), $_POST['scoreA'], $_POST['scoreB'], false);
             Bet::add($bet);
         } else {
             $betForThisMatch[0]->setScore_a($_POST['scoreA']);
