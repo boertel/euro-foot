@@ -59,8 +59,8 @@ if (!$facebookUser) {
         'redirect_uri' => $app_url,
             ));
 
-    //print('<script> top.location.href=\'' . $loginUrl . '\'</script>');
-    exit();
+    print('<script> top.location.href=\'' . $loginUrl . '\'</script>');
+    //exit();
 }
 
 $userProfile = $facebook->api("/me");
