@@ -85,6 +85,9 @@ if(empty($code)) {
     }
 }
 
+/*Define the local time in french*/
+setlocale (LC_TIME, 'fr_FR.utf8','fra');
+
 /* Autoload function to load automatically the php class when it's necessary
  * All classes should be in /classes/ and named classename.class.php
  */

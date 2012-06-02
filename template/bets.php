@@ -32,10 +32,6 @@
     }
 </script>
 
-<!--<p>
-    <a href="#" onclick="sendRequestViaMultiFriendSelector(); return false;">Invitez vos amis</a>
-</p>-->
-
 <?php
     $user = Session::getInstance()->getUserSession();
     $result = Db::request("SELECT g.score_a as game_score_a, g.score_b as game_score_b, b.score_a as bet_score_a, b.score_b as bet_score_b FROM bet b JOIN Game g ON g.id = b.game_id WHERE g.score_a is not NULL AND g.score_b is not NULL AND b.user_id = " . $user->getId() . " AND b.validated = false");
@@ -91,11 +87,12 @@
                     $teamA = getTeam($teams, $game->getTeam_a());
                     $teamB = getTeam($teams, $game->getTeam_b());
                     $bet = getBet($bets, $game->getId());
+                    $gameUTCTimestamp = strtotime($game->getStart_date()); // to display add 2h (7200sec) because FRANCE is GMT+2
                     
                     echo '<div class="match">
-                            <span class="matchDate">'.$game->getStart_date().'</span>
+                            <span class="matchDate">'.strftime("%a %d/%m %H:%M",$gameUTCTimestamp+7200).'</span>
                             <span class="matchTeamA">'.$teamA->getName().' <img src="includes/pictures/flags/'.$teamA->getFlag().'"></span>';
-                            if($currentUTCTimestamp < strtotime($game->getStart_date())){
+                            if($currentUTCTimestamp < $gameUTCTimestamp){
                                 displayBetFormular($game->getId(),$bet->getScore_a(),$bet->getScore_b());
                             } else {
                                 displayBetResult($game->getScore_a(),$game->getScore_b(),$bet->getScore_a(),$bet->getScore_b());
