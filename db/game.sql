@@ -1,4 +1,4 @@
-CREATE TABLE `Game` (
+CREATE TABLE `game` (
     `id` int NOT NULL AUTO_INCREMENT,
     `id_group` int(11) NOT NULL,
     `team_a` int NOT NULL,

@@ -78,13 +78,13 @@ class Game {
 
     public static function find($gameId) {
 
-        $statement = Db::prepareRequest("SELECT * FROM Game WHERE id = :id");
+        $statement = Db::prepareRequest("SELECT * FROM game WHERE id = :id");
         $statement->execute(array('id' => (int) $gameId));
         return new Game($statement->fetch(PDO::FETCH_NUM));
     }
 
     public static function findAll($condition = "", $values = array()) {
-        $statement = Db::prepareRequest("SELECT * FROM Game " . $condition);
+        $statement = Db::prepareRequest("SELECT * FROM game " . $condition);
         $statement->execute($values);
         return Db::createObjects('Game', $statement->fetchAll(PDO::FETCH_NUM));
     }
