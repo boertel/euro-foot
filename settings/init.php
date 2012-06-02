@@ -49,6 +49,11 @@ if (isset($_REQUEST['request_ids'])) {
     }
 }
 
+// POINTS
+$POINTS['perfect'] = 50;
+$POINTS['win'] = 20;
+$POINTS['lost'] = 0;
+
 // Get the current user
 $facebookUser = $facebook->getUser();
 
