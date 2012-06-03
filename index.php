@@ -1,6 +1,19 @@
 <?php require 'settings/init.php';
-$title = 'Euro 2012 - À vos paris';
-?>
+
+// Handle the facebook request (like someone accepting the invite of a friend)
+if (isset($_REQUEST['request_ids'])) {
+    $requestIDs = explode(',', $_REQUEST['request_ids']);
+    foreach ($requestIDs as $requestID) {
+        try {
+            $delete_success = $facebook->api('/' . $requestID, 'DELETE');
+        } catch (FacebookAPIException $e) {
+            // ignore error
+            // error_log($e);
+        }
+    }
+}
+
+$title = 'Euro 2012 - À vos paris';?>
 
 <!DOCTYPE HTML>
 <html lang="en">
@@ -44,6 +57,10 @@ $title = 'Euro 2012 - À vos paris';
                 FB.ui({method: 'apprequests',
                     title: '<?php echo $title; ?>',
                     message: 'Parie sur les match de l\'Euro 2012 et deviens le meilleur de tes amis !',
+                    display: 'iframe',
+                    <?php
+                        echo " access_token:'".Session::getInstance()->getUserSession()->getToken()."'";
+                    ?>
                 }, requestCallback);
             }
       

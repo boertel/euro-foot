@@ -18,7 +18,7 @@ $app_url = $FACEBOOK_APP['url'];
 $scope = $FACEBOOK_APP['scope'];
 
 /*Define the local time in french*/
-setlocale (LC_TIME, 'fr_FR.utf8','fra');
+setlocale(LC_TIME, 'fr_FR.utf8', 'fra');
 
 /* Autoload function to load automatically the php class when it's necessary
  * All classes should be in /classes/ and named classename.class.php
@@ -26,7 +26,7 @@ setlocale (LC_TIME, 'fr_FR.utf8','fra');
 function __autoload($className) {
     $classeFile = dirname(__FILE__) . '/../classes/' . strtolower($className) . '.class.php';
     if (file_exists($classeFile)) {
-	include_once $classeFile;
+        include_once $classeFile;
     }
 }
 
@@ -35,22 +35,9 @@ Session::getInstance();
 
 // Init the Facebook SDK
 $facebook = new Facebook(array(
-    'appId' => $app_id,
-    'secret' => $app_secret,
-));
-
-// Handle the facebook request (like someone accepting the invite of a friend)
-if (isset($_REQUEST['request_ids'])) {
-    $requestIDs = explode(',', $_REQUEST['request_ids']);
-    foreach ($requestIDs as $requestID) {
-        try {
-            $delete_success = $facebook->api('/' . $requestID, 'DELETE');
-        } catch (FacebookAPIException $e) {
-            // ignore error
-            // error_log($e);
-        }
-    }
-}
+            'appId' => $app_id,
+            'secret' => $app_secret,
+        ));
 
 // Get the current user
 $facebookUser = $facebook->getUser();
@@ -66,11 +53,12 @@ if (!$facebookUser) {
     exit();
 }
 
-$userProfile = $facebook->api("/me");
-$username = $userProfile["username"];
-
 // set a user session if not
 if (!Session::getInstance()->isUserConnected()) {
+
+    $userProfile = $facebook->api("/me");
+    $username = $userProfile["username"];
+
     // try to find if user exist in database
     $user = User::findUsername($username);
 
@@ -79,7 +67,7 @@ if (!Session::getInstance()->isUserConnected()) {
         $last_name = $userProfile["last_name"];
         $first_name = $userProfile["first_name"];
         $email = $userProfile["email"];
-        $token = "???";
+        $token = $facebook->getAccessToken();
         $score = 0;
 
         $newUser = new User($username, $first_name, $last_name, $email, $token, $score);
