@@ -30,6 +30,10 @@ class Session {
     public function isUserConnected() {
         return isset($_SESSION['user']);
     }
+    
+    public function disconnectUser(){
+        unset($_SESSION['user']);
+    }
 
     public function setSessionVar($varName, $value) {
         $_SESSION[$varName] = $value;

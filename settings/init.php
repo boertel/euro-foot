@@ -41,9 +41,51 @@ $facebook = new Facebook(array(
 
 // Get the current user
 $facebookUser = $facebook->getUser();
-
 // If the user has not installed the app, redirect them to the Auth Dialog
 if (!$facebookUser) {
+    redirectUserToLogin($facebook,$scope,$app_url);
+}
+
+$facebookProfil = $facebook->api("/me");
+ 
+// set a user session if not
+if (!Session::getInstance()->isUserConnected()) {
+    connectUser($facebook,$facebookProfil);
+}else{
+    // if the user is already connected, check that the current user session correspond to the current facebook user
+    $user = Session::getInstance()->getUserSession();
+    if($user->getUsername() != $facebookProfil["username"]){
+        Session::getInstance()->disconnectUser();
+        connectUser($facebook,$facebookProfil);
+    }
+}
+
+//
+// From here the user is created in database, and the session is set with the server
+//
+
+// update acces token if necessary
+$user = Session::getInstance()->getUserSession();
+if($facebook->getAccessToken() != $user->getToken()){
+    $user->setToken($facebook->getAccessToken());
+    User::update($user);
+    Session::getInstance()->setUserSession($user);
+}
+
+// POINTS
+$POINTS['perfect'] = 50;
+$POINTS['win'] = 20;
+$POINTS['lost'] = 0;
+
+
+/**
+ * Redirect the user to the login facebook page. Stop php script.
+ * 
+ * @param type $facebook the instance of the facebook SDK
+ * @param type $scope permissions asked to the user
+ * @param type $app_url $the redirect url after the user accepted permissions
+ */
+function redirectUserToLogin($facebook,$scope,$app_url){
     $loginUrl = $facebook->getLoginUrl(array(
         'scope' => $scope,
         'redirect_uri' => $app_url,
@@ -53,20 +95,22 @@ if (!$facebookUser) {
     exit();
 }
 
-// set a user session if not
-if (!Session::getInstance()->isUserConnected()) {
-
-    $userProfile = $facebook->api("/me");
-    $username = $userProfile["username"];
-
+/**
+ * Connect the user (set session)
+ * @param type $facebook the instance of facebook SDK class
+ * @param type $facebookProfil user data comming from facebook
+ */
+function connectUser($facebook, $facebookProfil){
+    $username = $facebookProfil["username"];
+    
     // try to find if user exist in database
     $user = User::findUsername($username);
 
     // create a user in database if not
     if ($user == null) {
-        $last_name = $userProfile["last_name"];
-        $first_name = $userProfile["first_name"];
-        $email = $userProfile["email"];
+        $last_name = $facebookProfil["last_name"];
+        $first_name = $facebookProfil["first_name"];
+        $email = $facebookProfil["email"];
         $token = $facebook->getAccessToken();
         $score = 0;
 
@@ -78,20 +122,4 @@ if (!Session::getInstance()->isUserConnected()) {
         Session::getInstance()->setUserSession($user[0]);
     }
 }
-
-// update acces token if necessary
-$user = Session::getInstance()->getUserSession();
-if($facebook->getAccessToken() != $user->getToken()){
-    $user->setToken($facebook->getAccessToken());
-    User::update($user);
-    Session::getInstance()->setUserSession($user);
-}
-
-// From here the user is created in database, and the session is set with the server
-
-
-// POINTS
-$POINTS['perfect'] = 50;
-$POINTS['win'] = 20;
-$POINTS['lost'] = 0;
 ?>
