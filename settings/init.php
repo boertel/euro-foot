@@ -79,6 +79,14 @@ if (!Session::getInstance()->isUserConnected()) {
     }
 }
 
+// update acces token if necessary
+$user = Session::getInstance()->getUserSession();
+if($facebook->getAccessToken() != $user->getToken()){
+    $user->setToken($facebook->getAccessToken());
+    User::update($user);
+    Session::getInstance()->setUserSession($user);
+}
+
 // From here the user is created in database, and the session is set with the server
 
 
