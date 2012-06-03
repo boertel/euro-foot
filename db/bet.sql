@@ -4,6 +4,7 @@ CREATE TABLE `bet` (
 	`user_id` int NOT NULL,
 	`score_a` int NOT NULL,
 	`score_b` int NOT NULL,
+        `validated` tinyint(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`),
     UNIQUE (`game_id`, `user_id`),
     FOREIGN KEY (`game_id`) REFERENCES game(id),
