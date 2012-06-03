@@ -45,23 +45,23 @@
         $scoreTeamB = $bet['game_score_b'];
 
         if($betScoreTeamA == null && $betScoreTeamB == null){
-            $points = $POINTS['lost']; 
+            $points += $POINTS['lost']; 
         }
         else if($scoreTeamA == $betScoreTeamA && $scoreTeamB == $betScoreTeamB) {
-            $points = $POINTS['perfect'];
+            $points += $POINTS['perfect'];
         } else if (($scoreTeamA > $scoreTeamB && $betScoreTeamA > $betScoreTeamB) 
                     || ($scoreTeamA == $scoreTeamB && $betScoreTeamA == $betScoreTeamB) 
                     || ($scoreTeamA < $scoreTeamB && $betScoreTeamA < $betScoreTeamB)){
-            $points = $POINTS['win'];
+            $points += $POINTS['win'];
         } else {
-            $points = $POINTS['lost'];
+            $points += $POINTS['lost'];
         }
         $response = $facebook->api('/' . $facebook->getUser() . '/scores', 'post', array('score' => 20));
         Db::request("UPDATE bet SET validated = true WHERE id = " . $bet['bet_id'] . ""); 
-        $user->setScore($user->getScore()+$points);
+        
     }
-    
-    if($points > 0){  
+    if($points > 0){ 
+        $user->setScore($user->getScore()+$points);
         User::update($user);
         Session::getInstance()->setUserSession($user); 
     }
