@@ -61,7 +61,6 @@
         Db::request("UPDATE user SET score = score + " . $points . " WHERE id = " . $user->getId() . "");
     }
 ?>
-
 <!-- Tabs -->
 <div id="groupes">
     <ul>
@@ -76,6 +75,7 @@
             echo '<li><a href="#groupe'.$groups[$i]->getId().'">'.$groups[$i]->getTitle().'</a></li>';
         }
         ?>
+        <li><a href="#leaderbord">Classement</a></li>
     </ul>
         <?php
         foreach($groups as $group){
@@ -101,9 +101,27 @@
                     .'</div>';
                 }
             echo '</div>';
-        }
-            
-        function getGamesForGroup($games, $groupId){
+        }?>
+    
+        <div id="leaderbord">
+            <div id="scores">
+                <?php $scores = $facebook->api('/'.$app_id.'/scores');
+                for($position = 0; $position < sizeof($scores['data']); $position++){
+                    $userInfos = $scores['data'][$position]['user'];
+                    $score = $scores['data'][$position]['score']?>
+                    <div class="score">
+                        <div class="rank"><span class="rank<?php echo $position+1;?>"><?php echo $position+1;?></span></div>
+                        <img src="http://graph.facebook.com/<?php echo $userInfos['id'];?>/picture" class="friendPicture"/>
+                        <div class="friendInfo">
+                            <span class="bold"><?php echo $userInfos['name'];?></span><br />
+                            Score : <?php echo $score;?>
+                        </div>
+                    </div>
+                <?php }?>
+            </div>
+        </div>
+    
+        <?php function getGamesForGroup($games, $groupId){
             $gamesForThisGroup = array();
             foreach($games as $game){
                 if($game->getId_group() == $groupId){
