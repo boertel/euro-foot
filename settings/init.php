@@ -101,20 +101,21 @@ function redirectUserToLogin($facebook,$scope,$app_url){
  * @param type $facebookProfil user data comming from facebook
  */
 function connectUser($facebook, $facebookProfil){
-    $username = $facebookProfil["username"];
+    $facebookId= $facebookProfil['id'];
     
     // try to find if user exist in database
-    $user = User::findUsername($username);
+    $user = User::findUserByFacebookId($facebookId);
 
     // create a user in database if not
     if ($user == null) {
+        $username = $facebookProfil["username"];
         $last_name = $facebookProfil["last_name"];
         $first_name = $facebookProfil["first_name"];
         $email = $facebookProfil["email"];
         $token = $facebook->getAccessToken();
         $score = 0;
 
-        $newUser = new User($username, $first_name, $last_name, $email, $token, $score);
+        $newUser = new User($facebookId, $username, $first_name, $last_name, $email, $token, $score);
         User::add($newUser);
 
         Session::getInstance()->setUserSession($newUser);

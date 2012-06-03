@@ -36,8 +36,9 @@
     $user = Session::getInstance()->getUserSession();
     $result = Db::request("SELECT b.id as bet_id, g.score_a as game_score_a, g.score_b as game_score_b, b.score_a as bet_score_a, b.score_b as bet_score_b FROM bet b JOIN Game g ON g.id = b.game_id WHERE g.score_a is not NULL AND g.score_b is not NULL AND b.user_id = " . $user->getId() . " AND b.validated = false");
     $bets = $result->fetchAll(PDO::FETCH_ASSOC);
+    $points = 0;
+    
     foreach ($bets as $bet) {
-        $points = 0;
         $betScoreTeamA = $bet['bet_score_a'];
         $betScoreTeamB = $bet['bet_score_b'];
         $scoreTeamA = $bet['game_score_a'];
@@ -57,8 +58,12 @@
         }
         $response = $facebook->api('/' . $facebook->getUser() . '/scores', 'post', array('score' => 20));
         Db::request("UPDATE bet SET validated = true WHERE id = " . $bet['bet_id'] . ""); 
-        $user = Session::getInstance()->getUserSession();
-        Db::request("UPDATE user SET score = score + " . $points . " WHERE id = " . $user->getId() . "");
+        $user->setScore($user->getScore()+$points);
+    }
+    
+    if($points > 0){  
+        User::update($user);
+        Session::getInstance()->setUserSession($user); 
     }
 ?>
 <!-- Tabs -->
@@ -104,7 +109,8 @@
         }?>
     
         <div id="leaderbord">
-            <div id="scores">
+            <div class="scores ui-widget ui-widget-content ui-corner-all">
+                <div class="widget-title ui-state-default ui-corner-all">Amis</div>
                 <?php $scores = $facebook->api('/'.$app_id.'/scores');
                 for($position = 0; $position < sizeof($scores['data']); $position++){
                     $userInfos = $scores['data'][$position]['user'];
@@ -119,6 +125,23 @@
                     </div>
                 <?php }?>
             </div>
+            <div class="scores ui-widget ui-widget-content ui-corner-all">
+                <div class="widget-title ui-state-default ui-corner-all ui-helper-clearfix">Général</div>
+                
+                <?php $users = User::findAllOrderByScore();
+                for($position = 0; $position < sizeof($users); $position++){
+                    $user = $users[$position];?>
+                    <div class="score">
+                        <div class="rank"><span class="rank<?php echo $position+1;?>"><?php echo $position+1;?></span></div>
+                        <img src="http://graph.facebook.com/<?php echo $user->getFacebookId();?>/picture" class="friendPicture"/>
+                        <div class="friendInfo">
+                            <span class="bold"><?php echo $user->getFirst_name().' '.$user->getLast_name();?></span><br />
+                            Score : <?php echo $user->getScore();?>
+                        </div>
+                    </div>
+                <?php }?>
+            </div>
+            <div class="clear"></div>
         </div>
     
         <?php function getGamesForGroup($games, $groupId){

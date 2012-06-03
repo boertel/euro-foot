@@ -8,6 +8,7 @@
 
 class User {
 private $id;
+private $facebookId;
 private $username;
 private $first_name;
 private $last_name;
@@ -23,19 +24,20 @@ public function __construct() {
 	if ($argc == 1 && getType($args[0]) == "array") {
 		$this->createObjectWithArray($args[0]);
 	}
-	else if ($argc == 7) {
-		$this->createObject($args[0],$args[1],$args[2],$args[3],$args[4],$args[5],$args[6]);
+	else if ($argc == 8) {
+		$this->createObject($args[0],$args[1],$args[2],$args[3],$args[4],$args[5],$args[6], $args[7]);
 	}
-	else if ($argc == 6) {
-		$this->createObjectWithoutPrimaryKey($args[0],$args[1],$args[2],$args[3],$args[4],$args[5]);
+	else if ($argc == 7) {
+		$this->createObjectWithoutPrimaryKey($args[0],$args[1],$args[2],$args[3],$args[4],$args[5],$args[6]);
 	}
 	else {
 		throw new IllegalArgumentException("wrong number of arguments");
 	}
 }
 
-protected function createObject($id, $username, $first_name, $last_name, $email, $token, $score) {
+protected function createObject($id, $facebookId, $username, $first_name, $last_name, $email, $token, $score) {
 	$this->id = $id;
+        $this->facebookId = $facebookId;
 	$this->username = $username;
 	$this->first_name = $first_name;
 	$this->last_name = $last_name;
@@ -44,18 +46,18 @@ protected function createObject($id, $username, $first_name, $last_name, $email,
 	$this->score = $score;
 }
 
-protected function createObjectWithoutPrimaryKey($username, $first_name, $last_name, $email, $token, $score) {
+protected function createObjectWithoutPrimaryKey($facebookId, $username, $first_name, $last_name, $email, $token, $score) {
 	$id = null;
-	$this->createObject($id, $username, $first_name, $last_name, $email, $token, $score);
+	$this->createObject($id, $facebookId, $username, $first_name, $last_name, $email, $token, $score);
 }
 
 protected function createObjectWithArray($array) {
 	$numAttributes = count($array);
-	if ($numAttributes == 7) {
-		$this->createObject($array[0],$array[1],$array[2],$array[3],$array[4],$array[5],$array[6]);
+	if ($numAttributes == 8) {
+		$this->createObject($array[0],$array[1],$array[2],$array[3],$array[4],$array[5],$array[6],$array[7]);
 	}
-	else if ($numAttributes == 6) {
-		$this->createObjectWithoutPrimaryKey($array[0],$array[1],$array[2],$array[3],$array[4],$array[5]);
+	else if ($numAttributes == 7) {
+		$this->createObjectWithoutPrimaryKey($array[0],$array[1],$array[2],$array[3],$array[4],$array[5],$array[6]);
 	}
 	else {
 		throw new IllegalArgumentException("wrong number of arguments");
@@ -69,19 +71,30 @@ protected function createObjectWithArray($array) {
 */
 public static function add(User $User) {
     
-    $statement = Db::prepareRequest("INSERT INTO User (username, first_name, last_name, email, token, score) VALUES (:userName, :firstName, :lastName, :email, :token, :score)");
+    $statement = Db::prepareRequest("INSERT INTO User (facebookId, username, first_name, last_name, email, token, score) VALUES (:facebookId, :userName, :firstName, :lastName, :email, :token, :score)");
     
-    $result = $statement->execute(array('userName' => $User->getUsername(), 'firstName' => $User->getFirst_name(), 
-	'lastName' => $User->getLast_name(), 'email' => $User->getEmail(), 'token' => $User->getToken(), 
-        'score' => $User->getScore()));
+    $result = $statement->execute(array('facebookId' => $User->getFacebookId(),'userName' => $User->getUsername(), 
+        'firstName' => $User->getFirst_name(), 'lastName' => $User->getLast_name(), 'email' => $User->getEmail(), 
+        'token' => $User->getToken(), 'score' => $User->getScore()));
    
     $User->setid(Db::lastId());
     
     return $result;
 }
 
+/**
+*
+* @param Bet $Bet
+* @return bool true on success or false on failure. 
+*/
 public static function update(User $User) {
-	Db::request("UPDATE User SET username=\"" . $User->getusername() . "\", first_name=\"" . $User->getfirst_name() . "\", last_name=\"" . $User->getlast_name() . "\", email=\"" . $User->getemail() . "\", token=\"" . $User->gettoken() . "\", score=\"" . $User->getscore() . "\" WHERE id=\"" . $User->getid() . "\"");
+	$statement = Db::prepareRequest("UPDATE User SET facebookId = :facebookId, username = :userName, first_name = :firstName, last_name = :lastName, email = :email, token = :token, score = :score WHERE id = :id");
+
+        $result = $statement->execute(array('facebookId' => $User->getFacebookId(),'userName' => $User->getUsername(), 
+            'firstName' => $User->getFirst_name(), 'lastName' => $User->getLast_name(), 'email' => $User->getEmail(), 
+            'token' => $User->getToken(), 'score' => $User->getScore(), 'id' => $User->getId()));
+        
+        return $result;
 }
 
 public static function delete(User $User) {
@@ -99,12 +112,21 @@ public static function findAll($condition="", $values = array()) {
 	return Db::createObjects('User', $statement->fetchAll(PDO::FETCH_NUM));
 }
 
-public static function findUsername($username) {
-    return self::findAll("WHERE username = :userName", array("userName"=>$username));
+
+public static function findUserByFacebookId($facebookId) {
+    return self::findAll('WHERE facebookId = :facebookId', array('facebookId'=>$facebookId));
+}
+
+public static function findAllOrderByScore() {
+    return self::findAll('ORDER BY score ASC');
 }
 
 public function getId() {
 	return $this->id;
+}
+
+public function getFacebookId(){
+    return $this->facebookId;
 }
 
 public function getUsername() {
@@ -133,6 +155,10 @@ public function getScore() {
 
 public function setId($i) {
 	$this->id = $i;
+}
+
+public function setFacebookId($fbId){
+    $this->facebookId = $fbId;
 }
 
 public function setUsername($u) {
