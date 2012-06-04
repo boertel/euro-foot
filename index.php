@@ -109,19 +109,19 @@ $title = 'Euro 2012 - À vos paris';
             <div class="match">
                 <span class="matchDate">lun. 11/06 18:00</span>
                 <span class="matchTeamA">FRANCE <img src="includes/pictures/flags/fr.png"></span>
-                <span class="matchScoreEnd win">Pari parfait <img src="includes/pictures/exact.png"  width="16" height="16" alt ="exact" title="Bonus pari exact" /> (10 - 0 :))</span>
+                <span class="matchScoreEnd win">Pari parfait (10 - 0 :)) <span class="points">+ <?php echo $POINTS['perfect'];?> <img src="includes/pictures/exact.png"  width="16" height="16" alt ="exact" title="Bonus pari exact" /></span></span>
                 <span class="matchTeamB"><img src="includes/pictures/flags/england.png"> ANGLETERRE</span>
             </div>
             <div class="match">
                 <span class="matchDate">dim. 10/06 18:00</span>
                 <span class="matchTeamA">ESPAGNE <img src="includes/pictures/flags/es.png"></span>
-                <span class="matchScoreEnd win">Bon pari</span>
+                <span class="matchScoreEnd win">Bon pari <span class="points">+ <?php echo $POINTS['win'];?></span></span>
                 <span class="matchTeamB"><img src="includes/pictures/flags/it.png"> ITALIE</span>
             </div>
             <div class="match">
                 <span class="matchDate">sam. 09/06 20:45</span>
                 <span class="matchTeamA">ALLEMAGNE <img src="includes/pictures/flags/de.png"></span>
-                <span class="matchScoreEnd loose">Mauvais pari</span>
+                <span class="matchScoreEnd loose">Mauvais pari <span class="points">= 0</span></span>
                 <span class="matchTeamB"><img src="includes/pictures/flags/pt.png"> PORTUGAL</span>
             </div>    
         </div>
