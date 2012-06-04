@@ -123,4 +123,24 @@ function connectUser($facebook, $facebookProfil){
         Session::getInstance()->setUserSession($user[0]);
     }
 }
+
+/**
+ * This method make an https call so don't call it multiple times in a same script
+ * 
+ * @param type $app_id
+ * @param type $app_secret
+ * @return app access token (not user acess token) 
+ */
+function getAppAccesToken($app_id, $app_secret){
+        $token_url =    "https://graph.facebook.com/oauth/access_token?" . 
+            "client_id=" . $app_id . 
+            "&client_secret=" . $app_secret . 
+            "&grant_type=client_credentials"; 
+        $reponse = file_get_contents($token_url);
+        
+        $param = null;
+        parse_str($reponse,$param);
+        
+        return $param['access_token'];
+    }
 ?>

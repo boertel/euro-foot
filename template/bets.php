@@ -33,6 +33,8 @@
 </script>
 
 <?php
+    // move all this part before the header picture in index.php because the header contains the score
+
     $user = Session::getInstance()->getUserSession();
     $result = Db::request("SELECT b.id as bet_id, g.score_a as game_score_a, g.score_b as game_score_b, b.score_a as bet_score_a, b.score_b as bet_score_b FROM bet b JOIN Game g ON g.id = b.game_id WHERE g.score_a is not NULL AND g.score_b is not NULL AND b.user_id = " . $user->getId() . " AND b.validated = false");
     $bets = $result->fetchAll(PDO::FETCH_ASSOC);
@@ -56,12 +58,16 @@
         } else {
             $points += $POINTS['lost'];
         }
-        $response = $facebook->api('/' . $facebook->getUser() . '/scores', 'post', array('score' => 20));
-        Db::request("UPDATE bet SET validated = true WHERE id = " . $bet['bet_id'] . ""); 
-        
+        //Db::request("UPDATE bet SET validated = true WHERE id = " . $bet['bet_id'] . "");    
     }
+    
     if($points > 0){ 
         $user->setScore($user->getScore()+$points);
+        
+        $access_token = $facebook->getAppId().'|'.$facebook->getAppSecret();  // found this on Internet. Not sure that's quite secure to give app secret... Use method below if not
+        //$access_token = getAppAccesToken($app_id, $app_secret); maybe use this instead ? But php_openssl module have to be set
+        $facebook->api('/' . $facebook->getUser() . '/scores', 'post', array('score' => $user->getScore(), 'access_token' => $access_token));
+        
         User::update($user);
         Session::getInstance()->setUserSession($user); 
     }
@@ -100,7 +106,7 @@
                             if($currentUTCTimestamp < $gameUTCTimestamp){
                                 displayBetFormular($game->getId(),$bet->getScore_a(),$bet->getScore_b());
                             } else {
-                                displayBetResult($game->getScore_a(),$game->getScore_b(),$bet->getScore_a(),$bet->getScore_b());
+                                displayBetResult($POINTS, $game->getScore_a(),$game->getScore_b(),$bet->getScore_a(),$bet->getScore_b());
                             }
                             echo '<span class="matchTeamB"><img src="includes/pictures/flags/'.$teamB->getFlag().'"> '.$teamB->getName().'</span>'
                     .'</div>';
@@ -201,36 +207,39 @@
             }
         }
         
-        function displayBetResult($scoreTeamA, $scoreTeamB, $betScoreTeamA, $betScoreTeamB){
+        function displayBetResult($POINTS, $scoreTeamA, $scoreTeamB, $betScoreTeamA, $betScoreTeamB){
             if($scoreTeamA == null && $scoreTeamB == null){
                 $betResult = 'En cours';
                 $betResultClass = '';
                 $perfect = '';
+                $point = '';
             }else{
                 $betResult = 'Résultat : '.$scoreTeamA.' - '.$scoreTeamB;
                 if($betScoreTeamA == null && $betScoreTeamB == null){
                     // user didn't bet
                     $betResultClass = ' loose';
-                    $perfect = ''; 
+                    $perfect = '';
+                    $point = '<span class="points">= '.$POINTS['lost'].' </span>';
                 }
                 else if($scoreTeamA == $betScoreTeamA &&  $scoreTeamB == $betScoreTeamB){
                     // user made a perfect bet
                     $betResultClass = ' win';
-                    $perfect = '<img src="includes/pictures/exact.png"  width="16" height="16" alt ="exact" title="Bonus pari exact" />';
+                    $point = '<span class="points">+ '.$POINTS['perfect'].' <img src="includes/pictures/exact.png"  width="16" height="16" alt ="exact" title="Bonus pari exact" /></span>';
                 }else if(($scoreTeamA > $scoreTeamB && $betScoreTeamA > $betScoreTeamB) 
                             || ($scoreTeamA == $scoreTeamB && $betScoreTeamA == $betScoreTeamB) 
                             || ($scoreTeamA < $scoreTeamB && $betScoreTeamA < $betScoreTeamB)){
                     // user made a winning bet
                     $betResultClass = ' win';
                     $perfect = '';
-                    
+                    $point = '<span class="points">+ '.$POINTS['win'].'</span>';
                 }else{
                     // user made a loosing bet
                     $betResultClass = ' loose';
                     $perfect = ''; 
+                    $point = '<span class="points">= '.$POINTS['lost'].' </span>';
                 }
             }
-            echo '<span class="matchScoreEnd'.$betResultClass.'">'.$betResult.' // Pari : '.$betScoreTeamA.' - '.$betScoreTeamB.' '.$perfect.'</span>'; 
+            echo '<span class="matchScoreEnd'.$betResultClass.'">'.$betResult.' // Pari : '.$betScoreTeamA.' - '.$betScoreTeamB.' '.$point.'</span>'; 
         }      
     ?>
 </div>

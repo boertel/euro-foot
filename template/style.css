@@ -170,6 +170,31 @@ html,body{
     background:none;
     display: none;
 }
+
+.match .points{
+color: #fff;
+
+background-image: linear-gradient(bottom, rgb(122,122,122) 8%, rgb(189,189,189) 54%);
+background-image: -o-linear-gradient(bottom, rgb(122,122,122) 8%, rgb(189,189,189) 54%);
+background-image: -moz-linear-gradient(bottom, rgb(122,122,122) 8%, rgb(189,189,189) 54%);
+background-image: -webkit-linear-gradient(bottom, rgb(122,122,122) 8%, rgb(189,189,189) 54%);
+background-image: -ms-linear-gradient(bottom, rgb(122,122,122) 8%, rgb(189,189,189) 54%);
+
+background-image: -webkit-gradient(
+	linear,
+	left bottom,
+	left top,
+	color-stop(0.08, rgb(122,122,122)),
+	color-stop(0.54, rgb(189,189,189))
+);
+
+border-radius: 3px 3px 3px 3px;
+box-shadow: 0 1px 3px rgba(0, 0, 0, 1);
+padding: 0px 2px 2px 2px;
+display: inline-block;
+margin-left: 5px;
+}
+
 .win{
     background-color: #8ae234;
 }
