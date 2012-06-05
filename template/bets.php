@@ -61,13 +61,13 @@
                     
                     echo '<div class="match">
                             <span class="matchDate">'.strftime("%a %d/%m %H:%M",$gameUTCTimestamp+7200).'</span>
-                            <span class="matchTeamA">'.$teamA->getName().' <img src="includes/pictures/flags/'.$teamA->getFlag().'"></span>';
+                            <span class="matchTeamA">'.$teamA->getName().' <img src="includes/pictures/flags/'.$teamA->getFlag().'" alt="'.strtoupper($teamA->getFlag()).'" /></span>';
                             if($currentUTCTimestamp < $gameUTCTimestamp){
                                 displayBetFormular($game->getId(),$bet->getScore_a(),$bet->getScore_b());
                             } else {
                                 displayBetResult($POINTS, $game->getScore_a(),$game->getScore_b(),$bet->getScore_a(),$bet->getScore_b());
                             }
-                            echo '<span class="matchTeamB"><img src="includes/pictures/flags/'.$teamB->getFlag().'"> '.$teamB->getName().'</span>'
+                            echo '<span class="matchTeamB"><img src="includes/pictures/flags/'.$teamB->getFlag().'" alt="'.strtoupper($teamB->getFlag()).'" /> '.$teamB->getName().'</span>'
                     .'</div>';
                 }
             echo '</div>';
@@ -82,7 +82,7 @@
                     $score = $scores['data'][$position]['score']?>
                     <div class="score">
                         <div class="rank"><span class="rank<?php echo $position+1;?>"><?php echo $position+1;?></span></div>
-                        <img src="http://graph.facebook.com/<?php echo $userInfos['id'];?>/picture" class="friendPicture"/>
+                        <img src="http://graph.facebook.com/<?php echo $userInfos['id'];?>/picture" class="friendPicture" alt="non dispo"/>
                         <div class="friendInfo">
                             <span class="bold"><?php echo $userInfos['name'];?></span><br />
                             Score : <?php echo $score;?>
@@ -98,7 +98,7 @@
                     $user = $users[$position];?>
                     <div class="score">
                         <div class="rank"><span class="rank<?php echo $position+1;?>"><?php echo $position+1;?></span></div>
-                        <img src="http://graph.facebook.com/<?php echo $user->getFacebookId();?>/picture" class="friendPicture"/>
+                        <img src="http://graph.facebook.com/<?php echo $user->getFacebookId();?>/picture" class="friendPicture" alt="non dispo"/>
                         <div class="friendInfo">
                             <span class="bold"><?php echo $user->getFirst_name().' '.$user->getLast_name();?></span><br />
                             Score : <?php echo $user->getScore();?>
@@ -140,7 +140,13 @@
         }
         
         function displayBetFormular($gameId, $betScoreTeamA, $betScoreTeamB){
-            echo '<span id="matchScore_'.$gameId.'" class="matchScore" title="Modifier le paris" onclick="modifyBet('.$gameId.')">Pari : '.$betScoreTeamA.' - '.$betScoreTeamB.'</span>
+            if($betScoreTeamA == null && $betScoreTeamB == null){
+                $bet = 'Pari : ?';
+            }else{
+                $bet = 'Pari : '.$betScoreTeamA.' - '.$betScoreTeamB;
+            }
+            
+            echo '<span id="matchScore_'.$gameId.'" class="matchScore" title="Modifier le paris" onclick="modifyBet('.$gameId.')">'.$bet.'</span>
                   <span id="matchScoreInput_'.$gameId.'" class="matchScoreInput">
                     <select id="scoreA_match_'.$gameId.'" name="scoreA_match_'.$gameId.'">';
                         displayPossibleScores($betScoreTeamA);
@@ -149,8 +155,8 @@
                     <select id="scoreB_match_'.$gameId.'" name="scoreB_match_'.$gameId.'">';
                         displayPossibleScores($betScoreTeamB);
                     echo '</select>
-                    <button id="saveButton" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-                            role="button" aria-disabled="false" onclick="saveBet('.$gameId.')">
+                    <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                            role="button" aria-disabled="false" onclick="saveBet('.$gameId.')" type="button">
                         <span class="ui-button-text">OK</span>
                     </button>
             </span>';
@@ -178,7 +184,7 @@
                     // user didn't bet
                     $betResultClass = ' loose';
                     $perfect = '';
-                    $point = '<span class="points">= '.$POINTS['lost'].' </span>';
+                    $point = '<span class="points">= '.$POINTS['lost'].'</span>';
                 }
                 else if($scoreTeamA == $betScoreTeamA &&  $scoreTeamB == $betScoreTeamB){
                     // user made a perfect bet
@@ -195,10 +201,17 @@
                     // user made a loosing bet
                     $betResultClass = ' loose';
                     $perfect = ''; 
-                    $point = '<span class="points">= '.$POINTS['lost'].' </span>';
+                    $point = '<span class="points">= '.$POINTS['lost'].'</span>';
                 }
             }
-            echo '<span class="matchScoreEnd'.$betResultClass.'">'.$betResult.' // Pari : '.$betScoreTeamA.' - '.$betScoreTeamB.' '.$point.'</span>'; 
+            
+            if($betScoreTeamA == null && $betScoreTeamB == null){
+                $bet = 'Pari : Aucun';
+            }else{
+                $bet = 'Pari : '.$betScoreTeamA.' - '.$betScoreTeamB;
+            }
+            
+            echo '<span class="matchScoreEnd'.$betResultClass.'">'.$betResult.' // '.$bet.' '.$point.'</span>'; 
         }      
     ?>
 </div>

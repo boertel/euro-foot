@@ -136,17 +136,19 @@ html,body{
 .match .matchScore, .match .matchScoreEnd, .match .matchScoreInput{
     display: inline-block;
     width: 280px;
+    min-height: 18px;
     text-align: center;
     cursor: pointer;
 }
 
 .match .matchScore:hover{
-    background-color: #ccff99;
+    background-color: orange;
 }
 
 .match .matchScoreEnd{
     cursor: default;
     border:none;
+    line-height: 18px;
 }
 
 .match .matchScoreInput{
@@ -172,8 +174,7 @@ html,body{
 
     padding: 0px 2px;
     display: inline-block;
-    height: 18px;
-    line-height: 18px;
+
     margin-left: 5px;
 }
 

@@ -142,21 +142,21 @@ $title = 'Euro 2012 - À vos paris';
             <p>Vous pourrez distinguer les matchs que vous avez gagnés ou perdus de cette façon :</p>
             <div class="match">
                 <span class="matchDate">lun. 11/06 18:00</span>
-                <span class="matchTeamA">FRANCE <img src="includes/pictures/flags/fr.png"></span>
+                <span class="matchTeamA">FRANCE <img src="includes/pictures/flags/fr.png" alt="FR" /></span>
                 <span class="matchScoreEnd win">Pari parfait (10 - 0 :)) <span class="points"><span class="perfect">+ <?php echo $POINTS['perfect']; ?></span></span></span>
-                <span class="matchTeamB"><img src="includes/pictures/flags/england.png"> ANGLETERRE</span>
+                <span class="matchTeamB"><img src="includes/pictures/flags/england.png" alt="EN"/> ANGLETERRE</span>
             </div>
             <div class="match">
                 <span class="matchDate">dim. 10/06 18:00</span>
-                <span class="matchTeamA">ESPAGNE <img src="includes/pictures/flags/es.png"></span>
+                <span class="matchTeamA">ESPAGNE <img src="includes/pictures/flags/es.png" alt ="ES" /></span>
                 <span class="matchScoreEnd win">Bon pari <span class="points">+ <?php echo $POINTS['win']; ?></span></span>
-                <span class="matchTeamB"><img src="includes/pictures/flags/it.png"> ITALIE</span>
+                <span class="matchTeamB"><img src="includes/pictures/flags/it.png" alt="IT" /> ITALIE</span>
             </div>
             <div class="match">
                 <span class="matchDate">sam. 09/06 20:45</span>
-                <span class="matchTeamA">ALLEMAGNE <img src="includes/pictures/flags/de.png"></span>
+                <span class="matchTeamA">ALLEMAGNE <img src="includes/pictures/flags/de.png" alt="DE"/></span>
                 <span class="matchScoreEnd loose">Mauvais pari <span class="points">= 0</span></span>
-                <span class="matchTeamB"><img src="includes/pictures/flags/pt.png"> PORTUGAL</span>
+                <span class="matchTeamB"><img src="includes/pictures/flags/pt.png" alt="PT" /> PORTUGAL</span>
             </div>    
         </div>
     </body>
