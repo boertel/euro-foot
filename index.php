@@ -71,7 +71,42 @@ $title = 'Euro 2012 - À vos paris';
     <body>
         <div id="fb-root"></div>
         <?php
-        // INCLUDE score update here, before header
+        // update score
+        $user = Session::getInstance()->getUserSession();
+        $result = Db::request("SELECT b.id as bet_id, g.score_a as game_score_a, g.score_b as game_score_b, b.score_a as bet_score_a, b.score_b as bet_score_b FROM bet b JOIN Game g ON g.id = b.game_id WHERE g.score_a is not NULL AND g.score_b is not NULL AND b.user_id = " . $user->getId() . " AND b.validated = false");
+        $bets = $result->fetchAll(PDO::FETCH_ASSOC);
+        $points = 0;
+
+        foreach ($bets as $bet) {
+            $betScoreTeamA = $bet['bet_score_a'];
+            $betScoreTeamB = $bet['bet_score_b'];
+            $scoreTeamA = $bet['game_score_a'];
+            $scoreTeamB = $bet['game_score_b'];
+
+            if ($betScoreTeamA == null && $betScoreTeamB == null) {
+                $points += $POINTS['lost'];
+            } else if ($scoreTeamA == $betScoreTeamA && $scoreTeamB == $betScoreTeamB) {
+                $points += $POINTS['perfect'];
+            } else if (($scoreTeamA > $scoreTeamB && $betScoreTeamA > $betScoreTeamB)
+                    || ($scoreTeamA == $scoreTeamB && $betScoreTeamA == $betScoreTeamB)
+                    || ($scoreTeamA < $scoreTeamB && $betScoreTeamA < $betScoreTeamB)) {
+                $points += $POINTS['win'];
+            } else {
+                $points += $POINTS['lost'];
+            }
+            Db::request("UPDATE bet SET validated = true WHERE id = " . $bet['bet_id'] . "");
+        }
+
+        if ($points > 0) {
+            $user->setScore($user->getScore() + $points);
+
+            $access_token = $facebook->getAppId() . '|' . $facebook->getAppSecret();  // found this on Internet. Not sure that's quite secure to give app secret... Use method below if not
+            //$access_token = getAppAccesToken($app_id, $app_secret); maybe use this instead ? But php_openssl module have to be set
+            $facebook->api('/' . $facebook->getUser() . '/scores', 'post', array('score' => $user->getScore(), 'access_token' => $access_token));
+
+            User::update($user);
+            Session::getInstance()->setUserSession($user);
+        }
         ?>
         <div id="header">
             <div id="userProfilBackground"></div>
@@ -89,10 +124,9 @@ $title = 'Euro 2012 - À vos paris';
                 </p>
             </div>
         </div>
-        <?php
-        // Include the tab to bet
-        require "template/bets.php";
-        ?>
+        
+        <?php require "template/bets.php";?>
+        
         <div id="footer"></div>
         <p class="center">Design by <a href="http://www.dinozef-design.fr" title="Dinozef Design, créations graphiques" target="_blank">Simon</a></p>
         <div id="rules">
@@ -109,13 +143,13 @@ $title = 'Euro 2012 - À vos paris';
             <div class="match">
                 <span class="matchDate">lun. 11/06 18:00</span>
                 <span class="matchTeamA">FRANCE <img src="includes/pictures/flags/fr.png"></span>
-                <span class="matchScoreEnd win">Pari parfait (10 - 0 :)) <span class="points">+ <?php echo $POINTS['perfect'];?> <img src="includes/pictures/exact.png"  width="16" height="16" alt ="exact" title="Bonus pari exact" /></span></span>
+                <span class="matchScoreEnd win">Pari parfait (10 - 0 :)) <span class="points"><span class="perfect">+ <?php echo $POINTS['perfect']; ?></span></span></span>
                 <span class="matchTeamB"><img src="includes/pictures/flags/england.png"> ANGLETERRE</span>
             </div>
             <div class="match">
                 <span class="matchDate">dim. 10/06 18:00</span>
                 <span class="matchTeamA">ESPAGNE <img src="includes/pictures/flags/es.png"></span>
-                <span class="matchScoreEnd win">Bon pari <span class="points">+ <?php echo $POINTS['win'];?></span></span>
+                <span class="matchScoreEnd win">Bon pari <span class="points">+ <?php echo $POINTS['win']; ?></span></span>
                 <span class="matchTeamB"><img src="includes/pictures/flags/it.png"> ITALIE</span>
             </div>
             <div class="match">
