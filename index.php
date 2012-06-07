@@ -25,7 +25,7 @@ $title = 'Euro 2012 - À vos paris';
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script type="text/javascript" src="includes/js/jquery-1.7.2.min.js"></script>
         <script type="text/javascript" src="includes/js/jquery-ui-1.8.20.custom.min.js"></script>
-        <script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
+        <script type="text/javascript" src="//connect.facebook.net/en_US/all.js"></script>
 
         <link type="text/css" href="includes/css/custom-theme/jquery-ui-1.8.20.custom.css" rel="stylesheet" />
         <link type="text/css" href="template/style.css" rel="stylesheet" />
