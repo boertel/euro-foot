@@ -197,9 +197,9 @@ html,body{
 
 /* leaderbord */
 .scores{
-    width: 250px;
+    width: 300px;
     float: left;
-    margin-left: 80px;
+    margin-left: 50px;
 }
 
 .widget-title{
@@ -246,6 +246,7 @@ html,body{
 .scores .friendInfo{
     float: left;
     height: 49px; /* 50 - border */
+    width: 170px;
     margin-left: 5px;
     border-bottom: solid 1px #a1b800;
 }
