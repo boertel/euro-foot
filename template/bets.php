@@ -82,7 +82,7 @@
                     $score = $scores['data'][$position]['score']?>
                     <div class="score">
                         <div class="rank"><span class="rank<?php echo $position+1;?>"><?php echo $position+1;?></span></div>
-                        <img src="http://graph.facebook.com/<?php echo $userInfos['id'];?>/picture" class="friendPicture" alt="non dispo"/>
+                        <img src="//graph.facebook.com/<?php echo $userInfos['id'];?>/picture" class="friendPicture" alt="non dispo"/>
                         <div class="friendInfo">
                             <span class="bold"><?php echo $userInfos['name'];?></span><br />
                             Score : <?php echo $score;?>
@@ -98,7 +98,7 @@
                     $user = $users[$position];?>
                     <div class="score">
                         <div class="rank"><span class="rank<?php echo $position+1;?>"><?php echo $position+1;?></span></div>
-                        <img src="http://graph.facebook.com/<?php echo $user->getFacebookId();?>/picture" class="friendPicture" alt="non dispo"/>
+                        <img src="//graph.facebook.com/<?php echo $user->getFacebookId();?>/picture" class="friendPicture" alt="non dispo"/>
                         <div class="friendInfo">
                             <span class="bold"><?php echo $user->getFirst_name().' '.$user->getLast_name();?></span><br />
                             Score : <?php echo $user->getScore();?>
