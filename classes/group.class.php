@@ -54,16 +54,16 @@ protected function createObjectWithArray($array) {
 
 
 public static function add(Group $Group) {
-	Db::request("INSERT INTO Group (title) VALUES (\"" . $Group->getTitle() . "\")");
+	Db::request("INSERT INTO group (title) VALUES (\"" . $Group->getTitle() . "\")");
 	$Group->setid(Db::lastId());
 }
 
 public static function update(Group $Group) {
-	Db::request("UPDATE Group SET title=\"" . $Group->getTitle() . "\" WHERE id=\"" . $Group->getid() . "\"");
+	Db::request("UPDATE group SET title=\"" . $Group->getTitle() . "\" WHERE id=\"" . $Group->getid() . "\"");
 }
 
 public static function delete(Group $Group) {
-	Db::request("DELETE FROM Group WHERE id=\"" . $Group->getId() . "\"");
+	Db::request("DELETE FROM group WHERE id=\"" . $Group->getId() . "\"");
 }
 
 public static function find($id) {
@@ -72,7 +72,7 @@ public static function find($id) {
 }
 
 public static function findAll($condition="",$values = array()) {
-	$statement = Db::prepareRequest("SELECT * FROM `Group` " . $condition);
+	$statement = Db::prepareRequest("SELECT * FROM `group` " . $condition);
         $statement->execute($values);
 	return Db::createObjects('Group', $statement->fetchAll(PDO::FETCH_NUM));
 }
