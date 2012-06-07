@@ -77,7 +77,7 @@ public static function find($id) {
 }
 
 public static function findAll($condition="",$values = array()) {
-	$statement = Db::prepareRequest("SELECT * FROM team " . $condition);
+	$statement = Db::prepareRequest("SELECT * FROM Team " . $condition);
         $statement->execute($values);
 	return Db::createObjects('Team', $statement->fetchAll(PDO::FETCH_NUM));
 }

@@ -213,7 +213,6 @@ html,body{
     height: 50px;
     float: left;
     line-height:50px;
-    padding: 0px 0px 2px 25px;
 }
 
 
@@ -255,10 +254,6 @@ html,body{
     clear: both;
     margin: 10px 0px;
     height: 50px;
-}
-
-.scores .myscore{
-  background-color:#a1b800; 
 }
 
 /* rules */
