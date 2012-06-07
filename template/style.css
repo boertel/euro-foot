@@ -16,6 +16,9 @@ fieldset, form, label, legend, caption {
     vertical-align: baseline;
     background: transparent;}
 
+body{
+    overflow:hidden;
+}
 .clear{clear:both;border:none;margin:0px;}
 
 .bold{font-weight:bold;}

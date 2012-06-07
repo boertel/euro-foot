@@ -53,6 +53,10 @@ $title = 'Euro 2012 - À vos paris';
                 appId  : '<?php echo $app_id; ?>',
                 frictionlessRequests: false
             });
+            
+            window.fbAsyncInit = function() {
+                FB.Canvas.setAutoResize(true);
+            }
 
             function sendRequestViaMultiFriendSelector() {
                 FB.ui({method: 'apprequests',
