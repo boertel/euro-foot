@@ -260,6 +260,10 @@ html,body{
     height: 50px;
 }
 
+.myscore{
+    background-color: #a1b800;
+}
+
 /* rules */
 
 #rules ul{
