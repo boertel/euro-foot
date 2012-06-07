@@ -1,6 +1,6 @@
 CREATE TABLE `user` (
 	`id` int NOT NULL AUTO_INCREMENT,
-        `facebookId` int(11) NOT NULL,
+        `facebookId` varchar(255) NOT NULL,
 	`username` varchar(255) NOT NULL,
 	`first_name` varchar(255) NOT NULL,
 	`last_name` varchar(255) NOT NULL,
