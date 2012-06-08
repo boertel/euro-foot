@@ -118,7 +118,7 @@ public static function findUserByFacebookId($facebookId) {
 }
 
 public static function findAllOrderByScore() {
-    return self::findAll('ORDER BY score ASC');
+    return self::findAll('ORDER BY score DESC');
 }
 
 public function getId() {
