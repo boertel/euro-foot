@@ -71,7 +71,7 @@ protected function createObjectWithArray($array) {
 */
 public static function add(User $User) {
     
-    $statement = Db::prepareRequest("INSERT INTO User (facebookId, username, first_name, last_name, email, token, score) VALUES (:facebookId, :userName, :firstName, :lastName, :email, :token, :score)");
+    $statement = Db::prepareRequest("INSERT INTO user (facebookId, username, first_name, last_name, email, token, score) VALUES (:facebookId, :userName, :firstName, :lastName, :email, :token, :score)");
     
     $result = $statement->execute(array('facebookId' => $User->getFacebookId(),'userName' => $User->getUsername(), 
         'firstName' => $User->getFirst_name(), 'lastName' => $User->getLast_name(), 'email' => $User->getEmail(), 
@@ -88,7 +88,7 @@ public static function add(User $User) {
 * @return bool true on success or false on failure. 
 */
 public static function update(User $User) {
-	$statement = Db::prepareRequest("UPDATE User SET facebookId = :facebookId, username = :userName, first_name = :firstName, last_name = :lastName, email = :email, token = :token, score = :score WHERE id = :id");
+	$statement = Db::prepareRequest("UPDATE user SET facebookId = :facebookId, username = :userName, first_name = :firstName, last_name = :lastName, email = :email, token = :token, score = :score WHERE id = :id");
 
         $result = $statement->execute(array('facebookId' => $User->getFacebookId(),'userName' => $User->getUsername(), 
             'firstName' => $User->getFirst_name(), 'lastName' => $User->getLast_name(), 'email' => $User->getEmail(), 
@@ -98,16 +98,16 @@ public static function update(User $User) {
 }
 
 public static function delete(User $User) {
-	Db::request("DELETE FROM User WHERE id=\"" . $User->getid() . "\"");
+	Db::request("DELETE FROM user WHERE id=\"" . $User->getid() . "\"");
 }
 
 public static function find($id) {
-	$result = Db::request("SELECT * FROM User WHERE id = \"" . $id . "\"");
+	$result = Db::request("SELECT * FROM user WHERE id = \"" . $id . "\"");
 	return new User($result->fetch(PDO::FETCH_NUM));
 }
 
 public static function findAll($condition="", $values = array()) {
-	$statement = Db::prepareRequest("SELECT * FROM User " . $condition);
+	$statement = Db::prepareRequest("SELECT * FROM user " . $condition);
         $statement->execute($values);
 	return Db::createObjects('User', $statement->fetchAll(PDO::FETCH_NUM));
 }
@@ -118,7 +118,7 @@ public static function findUserByFacebookId($facebookId) {
 }
 
 public static function findAllOrderByScore() {
-    return self::findAll('ORDER BY score DESC');
+    return self::findAll('ORDER BY score ASC');
 }
 
 public function getId() {

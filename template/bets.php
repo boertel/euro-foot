@@ -62,7 +62,7 @@
                     echo '<div class="match">
                             <span class="matchDate">'.strftime("%a %d/%m %H:%M",$gameUTCTimestamp+7200).'</span>
                             <span class="matchTeamA">'.$teamA->getName().' <img src="includes/pictures/flags/'.$teamA->getFlag().'" alt="'.strtoupper($teamA->getFlag()).'" /></span>';
-                            if($currentUTCTimestamp < $gameUTCTimestamp){
+                            if($currentUTCTimestamp < $gameUTCTimestamp+7200){
                                 displayBetFormular($game->getId(),$bet->getScore_a(),$bet->getScore_b());
                             } else {
                                 displayBetResult($POINTS, $game->getScore_a(),$game->getScore_b(),$bet->getScore_a(),$bet->getScore_b());
@@ -79,8 +79,13 @@
                 <?php $scores = $facebook->api('/'.$app_id.'/scores');
                 for($position = 0; $position < sizeof($scores['data']); $position++){
                     $userInfos = $scores['data'][$position]['user'];
-                    $score = $scores['data'][$position]['score']?>
-                    <div class="score">
+                    $score = $scores['data'][$position]['score'];
+                    if($userInfos['id'] == $user->getFacebookId()){
+                        $myscore = ' myscore';
+                    } else {
+                        $myscore = '';
+                    }?>
+                    <div class="score<?php echo $myscore;?>">
                         <div class="rank"><span class="rank<?php echo $position+1;?>"><?php echo $position+1;?></span></div>
                         <img src="//graph.facebook.com/<?php echo $userInfos['id'];?>/picture" class="friendPicture" alt="non dispo"/>
                         <div class="friendInfo">
@@ -94,17 +99,34 @@
                 <div class="widget-title ui-state-default ui-corner-all ui-helper-clearfix">Général</div>
                 
                 <?php $users = User::findAllOrderByScore();
+                $userNumber = sizeof($users);
+                $myposition = 0;
                 for($position = 0; $position < sizeof($users); $position++){
-                    $user = $users[$position];?>
-                    <div class="score">
-                        <div class="rank"><span class="rank<?php echo $position+1;?>"><?php echo $position+1;?></span></div>
-                        <img src="//graph.facebook.com/<?php echo $user->getFacebookId();?>/picture" class="friendPicture" alt="non dispo"/>
-                        <div class="friendInfo">
-                            <span class="bold"><?php echo $user->getFirst_name().' '.$user->getLast_name();?></span><br />
-                            Score : <?php echo $user->getScore();?>
-                        </div>
-                    </div>
-                <?php }?>
+                    $theUser = $users[$position];           
+                    if($position <20 || $theUser->getFacebookId() == $user->getFacebookId() || $position > ($userNumber-4)){
+                        if($theUser->getFacebookId() == $user->getFacebookId()){
+                            $myscore = ' myscore';
+                            $myposition = $position;
+                        } else {
+                            $myscore = '';
+                        }
+                        if($position == ($userNumber-3) && $position > 20 && $myposition >20 && $myposition < ($userNumber-4)){
+                            echo '<div class="scoreSeparator">...</div>';
+                        }
+                        ?>
+                        <div class="score<?php echo $myscore;?>">
+                            <div class="rank"><span class="rank<?php echo $position+1;?>"><?php echo $position+1;?></span></div>
+                            <img src="//graph.facebook.com/<?php echo $theUser->getFacebookId();?>/picture" class="friendPicture" alt="non dispo"/>
+                            <div class="friendInfo">
+                                <span class="bold"><?php echo $theUser->getFirst_name().' '.$theUser->getLast_name();?></span><br />
+                                Score : <?php echo $theUser->getScore();?>
+                            </div>
+                        </div>  
+                <?php }
+                    if($position == 19){
+                        echo '<div class="scoreSeparator">...</div>';
+                    } 
+                }?>
             </div>
             <div class="clear"></div>
         </div>

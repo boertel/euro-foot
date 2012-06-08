@@ -7,8 +7,9 @@ if (Session::getInstance()->isUserConnected()) {
     $currentUTCTimestamp = gmmktime();
     $game = Game::find($_POST['gameId']);
 
-    // Only update bet if the match has not begun
-    if ($currentUTCTimestamp < strtotime($game->getStart_date())) {
+    // Only update bet if the match has not begun$gameUTCTimestamp
+    $gameUTCTimestamp = strtotime($game->getStart_date());
+    if ($currentUTCTimestamp < $gameUTCTimestamp +7200 ) {
         $betForThisMatch = Bet::findBetByGameIdForUser($_POST['gameId'], Session::getInstance()->getUserSession());
         if ($betForThisMatch == null) {
             $bet = new Bet($_POST['gameId'], Session::getInstance()->getUserSession()->getId(), $_POST['scoreA'], $_POST['scoreB'], false);

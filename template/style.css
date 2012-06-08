@@ -264,6 +264,11 @@ html,body{
     background-color: #a1b800;
 }
 
+.scoreSeparator{
+    text-align: center;
+    font-size: 18px;
+}
+
 /* rules */
 
 #rules ul{
