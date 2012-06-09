@@ -79,12 +79,21 @@ $title = 'Euro 2012 - À vos paris';
             <div id="userProfilData">
                 <?php
                 $usersRanking = User::findAllOrderByScore();
+                $formerScore = 0;
+                $formerPosition = 0;
                 for($position = 0; $position < sizeof($usersRanking); $position++){
                     $theUser = $usersRanking[$position];
+                    if($formerScore == $theUser->getScore()){
+                        $displayPosition = $formerPosition;
+                    }else{
+                        $displayPosition = $position+1;
+                    }
                     if($theUser->getFacebookId() == $user->getFacebookId()){
                         $myGeneralRanking = $position +1;
                         break;
                     }
+                    $formerScore = $theUser->getScore();
+                    $formerPosition = $displayPosition;
                 }
                 $friendsRanking = $facebook->api('/'.$app_id.'/scores');
                 $formerScore = 0;

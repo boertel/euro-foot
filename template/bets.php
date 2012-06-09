@@ -111,8 +111,15 @@
                 <?php 
                 $userNumber = sizeof($usersRanking);
                 $myposition = 0;
+                $formerScore = 0;
+                $formerPosition = 0;
                 for($position = 0; $position < sizeof($usersRanking); $position++){
-                    $theUser = $usersRanking[$position];           
+                    $theUser = $usersRanking[$position];
+                    if($formerScore == $theUser->getScore()){
+                        $displayPosition = $formerPosition;
+                    }else{
+                        $displayPosition = $position+1;
+                    }
                     if($position <20 || $theUser->getFacebookId() == $user->getFacebookId() || $position > ($userNumber-4)){
                         if($theUser->getFacebookId() == $user->getFacebookId()){
                             $myscore = ' myscore';
@@ -125,7 +132,7 @@
                         }
                         ?>
                         <div class="score<?php echo $myscore;?>">
-                            <div class="rank"><span class="rank<?php echo $position+1;?>"><?php echo $position+1;?></span></div>
+                            <div class="rank"><span class="rank<?php echo $displayPosition;?>"><?php echo $displayPosition;?></span></div>
                             <img src="//graph.facebook.com/<?php echo $theUser->getFacebookId();?>/picture" class="friendPicture" alt="non dispo"/>
                             <div class="friendInfo">
                                 <span class="bold"><?php echo $theUser->getFirst_name().' '.$theUser->getLast_name();?></span><br />
@@ -135,7 +142,9 @@
                 <?php }
                     if($position == 19){
                         echo '<div class="scoreSeparator">...</div>';
-                    } 
+                    }
+                    $formerScore = $theUser->getScore();
+                    $formerPosition = $displayPosition;
                 }?>
             </div>
             <div class="clear"></div>
