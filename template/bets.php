@@ -76,33 +76,43 @@
         <div id="leaderbord">
             <div class="scores ui-widget ui-widget-content ui-corner-all">
                 <div class="widget-title ui-state-default ui-corner-all">Amis</div>
-                <?php $scores = $facebook->api('/'.$app_id.'/scores');
-                for($position = 0; $position < sizeof($scores['data']); $position++){
-                    $userInfos = $scores['data'][$position]['user'];
-                    $score = $scores['data'][$position]['score'];
+                <?php
+                $formerScore = 0;
+                $formerPosition = 0;
+                for($position = 0; $position < sizeof($friendsRanking['data']); $position++){
+                    $userInfos = $friendsRanking['data'][$position]['user'];
+                    $score = $friendsRanking['data'][$position]['score'];
+                    if($formerScore == $score){
+                        $displayPosition = $formerPosition;
+                    }else{
+                        $displayPosition = $position+1;
+                    }
                     if($userInfos['id'] == $user->getFacebookId()){
                         $myscore = ' myscore';
                     } else {
                         $myscore = '';
                     }?>
                     <div class="score<?php echo $myscore;?>">
-                        <div class="rank"><span class="rank<?php echo $position+1;?>"><?php echo $position+1;?></span></div>
+                        <div class="rank"><span class="rank<?php echo $displayPosition;?>"><?php echo $displayPosition;?></span></div>
                         <img src="//graph.facebook.com/<?php echo $userInfos['id'];?>/picture" class="friendPicture" alt="non dispo"/>
                         <div class="friendInfo">
                             <span class="bold"><?php echo $userInfos['name'];?></span><br />
                             Score : <?php echo $score;?>
                         </div>
                     </div>
-                <?php }?>
+                <?php 
+                $formerScore = $score;
+                $formerPosition = $displayPosition;
+                }?>
             </div>
             <div class="scores ui-widget ui-widget-content ui-corner-all">
                 <div class="widget-title ui-state-default ui-corner-all ui-helper-clearfix">Général</div>
                 
-                <?php $users = User::findAllOrderByScore();
-                $userNumber = sizeof($users);
+                <?php 
+                $userNumber = sizeof($usersRanking);
                 $myposition = 0;
-                for($position = 0; $position < sizeof($users); $position++){
-                    $theUser = $users[$position];           
+                for($position = 0; $position < sizeof($usersRanking); $position++){
+                    $theUser = $usersRanking[$position];           
                     if($position <20 || $theUser->getFacebookId() == $user->getFacebookId() || $position > ($userNumber-4)){
                         if($theUser->getFacebookId() == $user->getFacebookId()){
                             $myscore = ' myscore';
@@ -168,7 +178,7 @@
                 $bet = 'Pari : '.$betScoreTeamA.' - '.$betScoreTeamB;
             }
             
-            echo '<span id="matchScore_'.$gameId.'" class="matchScore" title="Modifier le paris" onclick="modifyBet('.$gameId.')">'.$bet.'</span>
+            echo '<span id="matchScore_'.$gameId.'" class="matchScore" title="Modifier le pari" onclick="modifyBet('.$gameId.')">'.$bet.'</span>
                   <span id="matchScoreInput_'.$gameId.'" class="matchScoreInput">
                     <select id="scoreA_match_'.$gameId.'" name="scoreA_match_'.$gameId.'">';
                         displayPossibleScores($betScoreTeamA);

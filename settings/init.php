@@ -48,17 +48,7 @@ if (!$facebookUser) {
 
 $facebookProfil = $facebook->api("/me");
  
-// set a user session if not
-if (!Session::getInstance()->isUserConnected()) {
-    connectUser($facebook,$facebookProfil);
-}else{
-    // if the user is already connected, check that the current user session correspond to the current facebook user
-    $user = Session::getInstance()->getUserSession();
-    if($user->getUsername() != $facebookProfil["username"]){
-        Session::getInstance()->disconnectUser();
-        connectUser($facebook,$facebookProfil);
-    }
-}
+connectUser($facebook,$facebookProfil);
 
 //
 // From here the user is created in database, and the session is set with the server

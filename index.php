@@ -28,7 +28,7 @@ $title = 'Euro 2012 - À vos paris';
         <script type="text/javascript" src="//connect.facebook.net/en_US/all.js"></script>
 
         <link type="text/css" href="includes/css/custom-theme/jquery-ui-1.8.20.custom.css" rel="stylesheet" />
-        <link type="text/css" href="template/style.css" rel="stylesheet" />
+        <link type="text/css" href="template/style2.css" rel="stylesheet" />
         <script type="text/javascript">
             $(function() {
                 $( "#rules" ).dialog({
@@ -74,56 +74,42 @@ $title = 'Euro 2012 - À vos paris';
     </head>
     <body>
         <div id="fb-root"></div>
-        <?php
-        // update score
-        $user = Session::getInstance()->getUserSession();
-        $result = Db::request("SELECT b.id as bet_id, g.score_a as game_score_a, g.score_b as game_score_b, b.score_a as bet_score_a, b.score_b as bet_score_b FROM bet b JOIN game g ON g.id = b.game_id WHERE g.score_a is not NULL AND g.score_b is not NULL AND b.user_id = " . $user->getId() . " AND b.validated = false");
-        $bets = $result->fetchAll(PDO::FETCH_ASSOC);
-        $points = 0;
-
-        foreach ($bets as $bet) {
-            $betScoreTeamA = $bet['bet_score_a'];
-            $betScoreTeamB = $bet['bet_score_b'];
-            $scoreTeamA = $bet['game_score_a'];
-            $scoreTeamB = $bet['game_score_b'];
-
-            if ($betScoreTeamA == null && $betScoreTeamB == null) {
-                $points += $POINTS['lost'];
-            } else if ($scoreTeamA == $betScoreTeamA && $scoreTeamB == $betScoreTeamB) {
-                $points += $POINTS['perfect'];
-            } else if (($scoreTeamA > $scoreTeamB && $betScoreTeamA > $betScoreTeamB)
-                    || ($scoreTeamA == $scoreTeamB && $betScoreTeamA == $betScoreTeamB)
-                    || ($scoreTeamA < $scoreTeamB && $betScoreTeamA < $betScoreTeamB)) {
-                $points += $POINTS['win'];
-            } else {
-                $points += $POINTS['lost'];
-            }
-            Db::request("UPDATE bet SET validated = true WHERE id = " . $bet['bet_id'] . "");
-        }
-
-        if ($points > 0) {
-            try {
-
-                $access_token = $facebook->getAppId() . '|' . $facebook->getAppSecret();  // found this on Internet. Not sure that's quite secure to give app secret... Use method below if not
-                //$access_token = getAppAccesToken($app_id, $app_secret); maybe use this instead ? But php_openssl module have to be set
-                $facebook->api('/' . $facebook->getUser() . '/scores', 'post', array('score' => $user->getScore() + $points, 'access_token' => $access_token));
-
-                $user->setScore($user->getScore() + $points);
-                User::update($user);
-                Session::getInstance()->setUserSession($user);
-            } catch (Exception $e) {
-                
-            }
-        }
-        ?>
         <div id="header">
             <div id="userProfilBackground"></div>
             <div id="userProfilData">
                 <?php
+                $usersRanking = User::findAllOrderByScore();
+                for($position = 0; $position < sizeof($usersRanking); $position++){
+                    $theUser = $usersRanking[$position];
+                    if($theUser->getFacebookId() == $user->getFacebookId()){
+                        $myGeneralRanking = $position +1;
+                        break;
+                    }
+                }
+                $friendsRanking = $facebook->api('/'.$app_id.'/scores');
+                $formerScore = 0;
+                $formerPosition = 0;
+                for($position = 0; $position < sizeof($friendsRanking['data']); $position++){
+                    $userInfos = $friendsRanking['data'][$position]['user'];
+                    $score = $friendsRanking['data'][$position]['score'];
+                    if($formerScore == $score){
+                        $displayPosition = $formerPosition;
+                    }else{
+                        $displayPosition = $position+1;
+                    }
+                    if($userInfos['id'] == $user->getFacebookId()){
+                        $myFriendRanking = $displayPosition;
+                        break;
+                    } 
+                    $formerScore = $score;
+                    $formerPosition = $displayPosition;
+                }
                 if (Session::getInstance()->isUserConnected()) {
                     $user = Session::getInstance()->getUserSession();
                     echo '<p class="center bold title">' . $user->getFirst_name() . ' ' . $user->getLast_name() . '</p>';
                     echo '<p class="score">Score : <span class="bold">' . $user->getScore() . '</span></p>';
+                    echo '<p class="generalRanking">Classement amis : <span class="bold rank'.$myGeneralRanking.'">' . $myFriendRanking . ' / '.sizeof($friendsRanking['data']).'</span></p>';
+                    echo '<p class="generalRanking">Classement général : <span class="bold rank'.$myFriendRanking.'">' . $myGeneralRanking . ' / '.sizeof($usersRanking).'</span></p>';
                 }
                 ?>
                 <p>
@@ -170,5 +156,18 @@ $title = 'Euro 2012 - À vos paris';
                 <span class="matchTeamB"><img src="includes/pictures/flags/pt.png" alt="PT" /> PORTUGAL</span>
             </div>    
         </div>
+        <script type="text/javascript">
+
+      	    var _gaq = _gaq || [];
+      	    _gaq.push(['_setAccount', 'UA-15226812-2']);
+      	    _gaq.push(['_trackPageview']);
+
+      	    (function() {
+      		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      	    })();
+
+      	</script>
     </body>
 </html>

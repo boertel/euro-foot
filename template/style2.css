@@ -63,13 +63,20 @@ html,body{
     font-size: 14px;
 }
 
-#userProfilData .score{
-    background-image: url(pictures/icon_score.png);
+#userProfilData .score, #userProfilData .generalRanking{
     background-repeat: no-repeat;
     background-position: 5px 0px;
-    height: 25px;
+    height: 22px;
     padding-left: 25px;
     padding-top: 2px;
+}
+
+#userProfilData .score{
+    background-image: url(pictures/icon_score.png);
+}
+
+#userProfilData .generalRanking{
+    background-image: url(pictures/general_ranking.png);
 }
 
 #footer{
@@ -216,24 +223,25 @@ html,body{
     height: 50px;
     float: left;
     line-height:50px;
+    text-align: center;
 }
 
 
-.scores .rank1, .scores .rank2, .scores .rank3{
+.rank1, .rank2, .rank3{
     background-repeat: no-repeat;
     background-position: 5px 0px;
     padding: 0px 0px 2px 25px;
 }
 
-.scores .rank1{
+.rank1{
     background-image: url(pictures/rank_1.png);
 }
 
-.scores .rank2{
+.rank2{
     background-image: url(pictures/rank_2.png);
 }
 
-.scores .rank3{
+.rank3{
     background-image: url(pictures/rank_3.png);
 }
 
