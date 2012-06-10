@@ -28,7 +28,7 @@ $title = 'Euro 2012 - À vos paris';
         <script type="text/javascript" src="//connect.facebook.net/en_US/all.js"></script>
 
         <link type="text/css" href="includes/css/custom-theme/jquery-ui-1.8.20.custom.css" rel="stylesheet" />
-        <link type="text/css" href="template/style2.css" rel="stylesheet" />
+        <link type="text/css" href="template/style3.css" rel="stylesheet" />
         <script type="text/javascript">
             $(function() {
                 $( "#rules" ).dialog({

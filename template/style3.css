@@ -156,7 +156,6 @@ html,body{
 }
 
 .match .matchScoreEnd{
-    cursor: default;
     border:none;
     line-height: 18px;
 }

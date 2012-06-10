@@ -62,7 +62,7 @@ class Bet {
      * @return bool true on success or false on failure. 
      */
     public static function add(Bet $Bet) {
-        $statement = Db::prepareRequest("INSERT INTO Bet (game_id, user_id, score_a, score_b, validated)"
+        $statement = Db::prepareRequest("INSERT INTO bet (game_id, user_id, score_a, score_b, validated)"
                     ." VALUES (:gameId, :userId, :scoreA, :scoreB, :validated)");
         
         $result = $statement->execute(array('gameId' => $Bet->getmatch_id(), 'userId' => $Bet->getuser_id(), 
@@ -78,7 +78,7 @@ class Bet {
      * @return bool true on success or false on failure. 
      */
     public static function update(Bet $Bet) {
-        $statement = Db::prepareRequest("UPDATE Bet SET game_id = :gameId, user_id = :userId, score_a = :scoreA,"
+        $statement = Db::prepareRequest("UPDATE bet SET game_id = :gameId, user_id = :userId, score_a = :scoreA,"
                         ." score_b = :scoreB, validated = :validated WHERE id= :id");
         return $statement->execute(array('gameId' => $Bet->getmatch_id(), 'userId' => $Bet->getuser_id(), 'scoreA' => $Bet->getscore_a(), 'scoreB' => $Bet->getscore_b(), 'validated' => $Bet->getValidated(), "id" => $Bet->getId()));
     }
@@ -89,24 +89,36 @@ class Bet {
      * @return bool true on success or false on failure. 
      */
     public static function delete(Bet $Bet) {
-	$statement = Db::prepareRequest("DELETE FROM Bet WHERE id = :id");
+	$statement = Db::prepareRequest("DELETE FROM bet WHERE id = :id");
 	return $statement->execute(array('id' =>  $Bet->getId()));
     }
     
     public static function find($id) {
-	$statement = Db::prepareRequest("SELECT * FROM Bet WHERE id = :id");
+	$statement = Db::prepareRequest("SELECT * FROM bet WHERE id = :id");
 	$statement->execute(array('id' =>  $id));
 	return new Bet($statement->fetch(PDO::FETCH_NUM));
     }
 
     public static function findAll($condition = "", $values = array()) {
-	$statement = Db::prepareRequest("SELECT * FROM Bet " . $condition);
+	$statement = Db::prepareRequest("SELECT * FROM bet " . $condition);
         $statement->execute($values);
 	return Db::createObjects('Bet', $statement->fetchAll(PDO::FETCH_NUM));
     }
     
     public static function findAllBetsForUser(User $user) {
         return Bet::findAll("WHERE user_id = :userId", array('userId' => (int) $user->getId()));
+    }
+    
+    public static function findAllBetsForUserIdsAndGameId(array $usersId,$gameId) {
+        for($i = 0 ; $i < count($usersId);$i++){
+            $usersId[$i] = Db::getConnection()->quote($usersId[$i]);
+        }
+        if(count($usersId) > 0){
+            $result = Db::request ('SELECT B.*, U.* FROM bet B JOIN user U ON U.id = B.user_id WHERE game_id = '.(int) $gameId.' AND U.facebookId IN('.implode(',', $usersId).') ORDER BY U.last_name, U.first_name');
+            return $result->fetchAll(PDO::FETCH_ASSOC);  
+        }else{
+            return array();
+        }
     }
     
     public static function findBetByGameIdForUser($matchId, User $user) {
