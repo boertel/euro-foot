@@ -16,7 +16,7 @@
     
     $(function(){
         // Tabs
-        $('#groupes').tabs();
+        $('#groupes').tabs({selected: $('.tabs-groupe').length - 1});
     });
 
     function modifyBet(idMatch){
@@ -67,7 +67,7 @@
         $groupId = $group->getId();
         $gamesForThisGroup = getGamesForGroup($games, $groupId);
 
-        echo '<div id="groupe' . $groupId . '">';
+        echo '<div id="groupe' . $groupId . '" class="tabs-groupe">';
         foreach ($gamesForThisGroup as $game) {
             $teamA = getTeam($teams, $game->getTeam_a());
             $teamB = getTeam($teams, $game->getTeam_b());
